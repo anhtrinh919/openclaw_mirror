@@ -3,7 +3,7 @@ set -euo pipefail
 
 SOURCE_DIR="${SOURCE_DIR:-/data/workspace}"
 MIRROR_DIR="${MIRROR_DIR:-/data/workspace-mirror}"
-BRANCH="${MIRROR_BRANCH:-main}"
+BRANCH="main"
 EXCLUDES_FILE="${EXCLUDES_FILE:-/data/workspace/ops/workspace-mirror/mirror-excludes.txt}"
 REPO_URL="${MIRROR_REPO:-}"
 PUSH="${PUSH:-1}"

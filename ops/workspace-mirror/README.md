@@ -20,9 +20,10 @@ Set these variables:
 - `MIRROR_REPO=https://github.com/<owner>/<repo>.git`
 - `GITHUB_TOKEN=<github_pat_with_repo_write>`
 - Optional:
-  - `MIRROR_BRANCH=main`
   - `MIRROR_GIT_NAME=SpongeBot Mirror`
   - `MIRROR_GIT_EMAIL=spongebot-mirror@local`
+
+> Branch is intentionally fixed to `main` for bot snapshots.
 
 ## 3) First dry run (no push)
 ```bash
