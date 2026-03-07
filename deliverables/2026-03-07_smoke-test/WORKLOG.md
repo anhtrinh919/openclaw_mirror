@@ -1,0 +1,1 @@
+- <timestamp> <agentId>: <what changed / commands run / key decision>

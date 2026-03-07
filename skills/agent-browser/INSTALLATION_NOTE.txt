@@ -1,0 +1,3 @@
+Manual install via clawhub inspect (avoids install endpoint rate-limit).
+Slug: agent-browser
+Version: 0.2.0

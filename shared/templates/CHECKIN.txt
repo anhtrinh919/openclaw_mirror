@@ -1,0 +1,8 @@
+STATUS: <blocked|in_progress|ready_for_review>
+DONE:
+- ...
+NEXT:
+- ...
+BLOCKERS: <none|...>
+ETA: <time>
+ARTIFACTS: </deliverables/... paths>

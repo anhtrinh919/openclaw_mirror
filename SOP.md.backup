@@ -1,0 +1,563 @@
+# SOP Trade - Quy Trình Xử Lý Đơn Hàng In Ấn
+
+## Tổng Quan
+
+Quy trình xử lý đơn hàng in ấn từ file Excel/screenshot → tổng hợp vào Google Sheet.
+
+---
+
+## Luồng Chính
+
+```
+User gửi file Excel/screenshot
+    ↓
+Main: Thông báo "đã nhận, đang xử lý..."
+    ↓
+Spawn sub-agent (Grok 4 Fast) để xử lý
+    ↓
+Sub-agent: Đọc file → Tổng hợp → Ghi GSheet → Quality check
+    ↓
+Main: Thông báo "đã xong" cho user
+```
+
+---
+
+## Chi Tiết Các Bước
+
+### Bước 1: Nhận File & Thông Báo
+
+**Trigger:** User 6402311566 gửi tin nhắn DM hoặc trong group -5194157539 chứa:
+- File Excel (.xlsx), hoặc
+- Screenshot có bảng kê đơn hàng
+
+**Quy tắc:** 1 file/bảng = 1 đơn hàng
+
+**Action của Main:**
+1. Thông báo ngắn: "Đã nhận thông tin, đang xử lý..."
+2. Spawn sub-agent (model: `x-ai/grok-4-fast`) để làm task
+
+---
+
+### Bước 2: Đọc File Excel & Tổng Hợp
+
+**Cấu trúc file Excel:**
+- **A1:** `NCC: [Tên nhà cung cấp]`
+- **A2:** `CT: [Tên chương trình]`
+- **A5 trở đi:** Data (header ở row 3)
+
+| Cột | Nội dung |
+|-----|----------|
+| A | Tên hạng mục |
+| B | STT |
+| C | Siêu Thị |
+| D | Code |
+| E | Số lượng |
+| F | Chất liệu |
+| G | Đơn giá |
+| H | Dài |
+| I | Rộng |
+| J | Thành Tiền |
+
+**Logic tổng hợp:**
+1. Group data theo: `(Tên hạng mục + Chất liệu + Đơn giá + Dài + Rộng)`
+2. Tính tổng SL = SUM(Số lượng) cho mỗi group
+3. Tính tổng thành tiền = SUM(Thành Tiền) cho mỗi group
+4. Map SL từng siêu thị vào cột tương ứng
+
+---
+
+### Bước 3: Ghi Vào Google Sheet
+
+**GSheet:** `https://docs.google.com/spreadsheets/d/1cHzgteJN6LfhrQdiZI8IABp_rJ17Xr-RoAqOoTCCBWc`
+**Sheet:** `Tổng hợp`
+
+**Cấu trúc GSheet:**
+- Row 1: Title
+- Row 2: Header
+- Row 3+: Data (append mới, không đè)
+
+**Mapping cột:**
+
+| GSheet | Nội dung | Source |
+|--------|----------|--------|
+| A | Thời gian | Ngày nhận file (dd/mm/yyyy) |
+| B | CT | Từ A2 file Excel |
+| C | Tên hạng mục | Từ cột A file Excel |
+| D | Chất liệu | Từ cột F file Excel |
+| E | Rộng | Từ cột I file Excel |
+| F | Dài | Từ cột H file Excel |
+| G | Đơn giá | Từ cột G file Excel |
+| H | Thành tiền | Tổng thành tiền của hạng mục |
+| I | Số lượng | Tổng SL của hạng mục |
+| J-AH | SL theo siêu thị | Map theo Code (xem bảng dưới) |
+| AI | NCC | Từ A1 file Excel |
+
+**Map Code → Cột GSheet:**
+
+| Code | Cột | Code | Cột | Code | Cột |
+|------|-----|------|-----|------|-----|
+| BVI | J | LQU | N | TTH | Y |
+| CNG | K | PXU | O | VYE | Z |
+| HDI | L | XKH | P | TDI | AA |
+| CSO | M | DAN | Q | PHY | AB |
+| | | TTI | R | GTH | AC |
+| | | XMA | S | DTR | AD |
+| | | PYE | T | QYE | AE |
+| | | TNG | U | DVA | AF |
+| | | CLI | V | LNH | AG |
+| | | KMO | W | VP | AH |
+| | | TNU | X | HNA | (thêm nếu cần) |
+
+---
+
+### Bước 4: Quality Check
+
+**Check 1: Tổng Số Lượng**
+- Tổng SL ở cột I phải bằng tổng SL ở các cột J-AH
+
+**Check 2: Tổng Thành Tiền**
+- Thành tiền trong GSheet phải bằng tổng thành tiền từ file Excel
+
+**Kết quả:**
+- ✅ Nếu pass → Thông báo "đã xong"
+- ❌ Nếu fail → Sửa lỗi (thử tối đa 2 lần)
+
+---
+
+## Quy Tắc Spawn Sub-Agent
+
+### Khi Nào Spawn?
+- **LUÔN** spawn sub-agent cho task xử lý file Excel/GSheet
+- Sub-agent dùng model: `x-ai/grok-4-fast`
+
+### Kiến Thức Cần Truyền Cho Sub-Agent:
+1. Cách cài pandas/openpyxl (nếu chưa có)
+2. Cấu trúc file Excel (A1, A2, header row 3, data từ row 5)
+3. Cách group & tổng hợp data
+4. Cấu trúc GSheet & mapping cột
+5. Cách re-auth gog nếu token hết hạn:
+   ```bash
+   GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth credentials /data/workspace/gog_client_secret.json
+   GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth tokens import /data/workspace/gog_auth_backup.json
+   ```
+6. Cách quality check
+
+### Communication:
+- ❌ Sub-agent KHÔNG communicate với user/group
+- ✅ Sub-agent chỉ announce về main session
+- ✅ Main session communicate với user
+
+---
+
+## Quy Tắc Xử Lý Lỗi
+
+### Lỗi Hệ Thống (API error, spawn failed, model unresponsive)
+1. Tự spawn lại 1 lần nữa
+2. Nếu spawn 2 lần vẫn fail → Báo về Boss (Telegram: 171900099)
+
+### Lỗi Thực Hiện (sub-agent spawn ok nhưng thao tác lỗi)
+1. Tự tìm cách sửa lỗi (thử tối đa 2 lần)
+2. Nếu vẫn fail → Báo về Boss với chi tiết lỗi
+
+---
+
+## Xử Lý Screenshot
+
+Nếu user gửi screenshot thay vì Excel:
+1. Dùng OCR hoặc browser tool để đọc bảng
+2. Extract data theo cấu trúc tương tự Excel
+3. Process như bình thường
+
+---
+
+## File Liên Quan
+
+- **Google Sheet:** `1cHzgteJN6LfhrQdiZI8IABp_rJ17Xr-RoAqOoTCCBWc`
+- **Gog Auth Backup:** `/data/workspace/gog_auth_backup.json`
+- **Gog Client Secret:** `/data/workspace/gog_client_secret.json`
+- **Keyring Password:** `openclaw_secure_2026`
+- **Account:** `tuananhtrinh919@gmail.com`
+
+---
+
+## Ví Dụ Thực Tế
+
+**File Excel:**
+```
+A1: NCC: Đối tác vàng
+A2: CT: Trang trí khu bán thùng
+A5-J28: Fomex 1 (24 siêu thị, mỗi nơi SL=2)
+A29-J52: Fomex 2 (24 siêu thị, mỗi nơi SL=5)
+A53-J76: Fomex 3 (24 siêu thị, mỗi nơi SL=1)
+```
+
+---
+
+**Cập nhật:** 2026-02-26
+**Tác giả:** SpongeBot 🫧
+
+---
+
+# SOP Leave Request - Quy Trình Xin Nghỉ
+
+## Tổng Quan
+
+Quy trình xử lý yêu cầu xin nghỉ từ nhân viên trong group Telegram -4121104521 → Boss approval → Tạo calendar event.
+
+---
+
+## Config
+
+**Group:** `-4121104521` (requireMention: true, groupPolicy: open)
+**Language:** Tiếng Việt (luôn respond bằng tiếng Việt trong group này)
+**Pending limit:** 1 request tại một thời điểm
+**Tracking file:** `/data/workspace/leave_requests.json`
+
+---
+
+## Luồng Chính
+
+```
+User mention + trigger (@xinnghi / /xinnghi / "xin nghỉ")
+    ↓
+Bot: Parse ngày nghỉ + lý do (hoặc hỏi lại)
+    ↓
+Bot: Lưu pending request → Reply "Đã nhận. Chờ duyệt"
+    ↓
+Bot: DM Boss → Gửi request details → Chờ approval
+    ↓
+Boss reply "duyệt" hoặc "từ chối"
+    ↓
+If approved:
+    - Bot: Reply group "@user Đã duyệt"
+    - Bot: Tạo calendar event (restore gog auth trước)
+If rejected:
+    - Bot: Reply group "@user Đã từ chối"
+```
+
+---
+
+## Chi Tiết Các Bước
+
+### Bước 1: Trigger Detection
+
+**Trigger patterns** (trong group -4121104521):
+- Mention bot + `@xinnghi`
+- Mention bot + `/xinnghi`
+- Mention bot + "xin nghỉ"
+
+**Language:** Bot LUÔN respond bằng tiếng Việt trong group này.
+
+---
+
+### Bước 2: Parse Ngày Nghỉ & Lý Do
+
+**Input formats:**
+- 1 ngày: "nghỉ ngày 28/2", "nghỉ 28/02", "nghỉ thứ 6"
+- Range: "28/2 - 2/3", "từ 28/2 đến 2/3"
+- Relative: "nghỉ 3 ngày tới", "nghỉ tuần sau"
+
+---
+
+### Bước 3: Save Pending Request
+
+**File:** `/data/workspace/leave_requests.json`
+
+```json
+{
+  "pending": {
+    "id": "LR-YYYYMMDDNN",
+    "userId": 123456789,
+    "userName": "Nguyễn Văn A",
+    "dates": { "start": "2026-02-28", "end": "2026-03-02" },
+    "reason": "Đi đám cưới",
+    "status": "pending",
+    "createdAt": "2026-02-27T08:00:00Z"
+  },
+  "history": []
+}
+```
+
+---
+
+### Bước 4: DM Boss
+
+```
+📋 Yêu cầu xin nghỉ:
+
+👤 Người yêu cầu: [Tên] (user ID: [ID])
+📅 Ngày nghỉ: [Ngày] ([Số ngày])
+📝 Lý do: [Lý do]
+
+Reply "duyệt" để approve hoặc "từ chối" để reject.
+```
+
+---
+
+### Bước 5 & 6: Approval + Calendar Event
+
+**Boss reply:** "duyệt" → Approved | "từ chối" → Rejected
+
+**Calendar creation (EXACT syntax):**
+```bash
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth credentials /data/workspace/gog_client_secret.json && \
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth tokens import /data/workspace/gog_auth_backup.json
+
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog calendar create tuananhtrinh919@gmail.com \
+  --account tuananhtrinh919@gmail.com \
+  --summary "[Tên user] - [Lý do]" \
+  --from "YYYY-MM-DD" \
+  --to "YYYY-MM-DD" \
+  --all-day
+```
+
+---
+
+**Cập nhật:** 2026-02-27
+**Tác giả:** SpongeBot 🫧
+
+---
+
+# SOP Daily Morning Report - Quy Trình Báo Cáo Sáng
+
+## ⭐ APPROVED PERFECT TEMPLATE (2026-02-28, Boss confirmed)
+
+```
+🫧 DAILY REPORT — [Weekday, DD Mon YYYY] 🫧
+
+━━━━━━━━━━━━━━━━━━━━
+
+📧 EMAIL ACTIONS REQUIRED ([N] unread)
+
+🔥 Priority:
+• [Sender]: [Subject] — [Action needed]
+• [Sender]: [Subject] — [Action needed]
+
+📋 Review:
+• [Sender]: [Subject] — [Impact/notes]
+• [Sender]: [Subject] — [Impact/notes]
+
+━━━━━━━━━━━━━━━━━━━━
+
+🤖 AGENT WORK RECAP (Last 24h)
+
+✅ Completed Tasks:
+• 📊 [Task] — [Details]
+• 📝 [Task] — [Details]
+• 🗓️ [Task] — [Details]
+
+📈 Sessions Active:
+• [N] session(s) ([channels]) — [N]k tokens processed
+• Key activities: [summary]
+
+⚠️ Issues Resolved:
+• [Issue] → [Fix applied]
+
+━━━━━━━━━━━━━━━━━━━━
+
+🏪 VN RETAIL NEWS (Last 7 days)
+
+📈 Key Updates:
+• [Chain] — [Update]
+• [Chain] — [Update]
+• [Context] — [Notable event]
+
+🎯 Action: [Urgent item or "No urgent items — market stable"]
+
+━━━━━━━━━━━━━━━━━━━━
+
+📅 TODAY'S SCHEDULE ([Weekday, DD Mon])
+
+🕘 [Time slot]:
+• [HH:MM] — [Event]: [Person/Details] 🔥
+
+📋 [Category] ([N] people/items):
+• [Person/Item] — [Status/detail]
+• [Person/Item] — [Status/detail]
+
+🖨️ [Category]:
+• [N] [items] total — [brief description]
+• Latest: [item] ([quantity])
+
+━━━━━━━━━━━━━━━━━━━━
+
+✨ ACTION ITEMS FOR BOSS:
+
+🔥 Urgent:
+• [HH:MM] [Event] — [Person/context]
+
+📋 Review:
+• [Item] — [Why it matters]
+• [Item] — [Why it matters]
+
+📊 Monitor:
+• [Item] — [What to watch]
+• [Item] — [What to watch]
+
+━━━━━━━━━━━━━━━━━━━━
+
+🎯 Quality Gate Status: ✅ All checks passed
+📝 Syntax Fixes: ✅ [Status or "None needed"]
+
+Ready for the day, Boss! 🫧
+```
+
+---
+
+## Config
+
+**Cron Job ID:** `1ecc6e06-c111-44bb-8167-b4c517750d0d`
+**Schedule:** `0 6 * * *` (6:00 AM daily, Asia/Ho_Chi_Minh)
+**Session Target:** `isolated`
+**Model:** `openrouter/anthropic/claude-sonnet-4.6` ⚠️ NEVER use GLM-5
+**Delivery:** Telegram DM → Boss (171900099)
+
+---
+
+## Step 0: Pre-Flight (ALWAYS FIRST)
+
+```bash
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth credentials /data/workspace/gog_client_secret.json && \
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth tokens import /data/workspace/gog_auth_backup.json
+```
+
+**Quality gate rules:**
+- Test EACH tool before compiling
+- Fail → retry ONCE with corrected syntax
+- Still fail → mark section `❌ Failed: [error]`
+- NEVER send report without all sections (or explicit ❌ acknowledgment)
+
+---
+
+## Step 1: Email Recap
+
+**Command (EXACT):**
+```bash
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog gmail search "is:unread OR is:important" --account tuananhtrinh919@gmail.com --max 10
+```
+
+**Output target:**
+- 🔥 Priority: action-required emails (updates, invoices, deadlines)
+- 📋 Review: informational emails (reports, pricing, announcements)
+- Skip: pure promotions unless notable
+
+---
+
+## Step 2: Agent Work Recap (ALL sessions, last 24h)
+
+**Commands (EXACT):**
+```typescript
+// Step A: Get all sessions
+sessions_list({ activeMinutes: 1440, limit: 20 })
+
+// Step B: For EACH session found, get history
+sessions_history({ sessionKey: "[key]", limit: 50 })
+```
+
+**Coverage:** ALL channels — Telegram, Discord, WhatsApp, UI
+**Output target:**
+- ✅ Completed Tasks: what was done (with emoji context 📊📝🗓️⚙️🧪)
+- 📈 Sessions Active: count + channel + tokens processed
+- ⚠️ Issues Resolved: errors fixed (with → arrow showing fix)
+
+---
+
+## Step 3: VN Retail News
+
+**Commands (EXACT):**
+```typescript
+web_search({ query: "Vietnam retail news WinMart Big C Lotte Mart 2026", country: "ALL", count: 5 })
+web_search({ query: "Vietnam supermarket Aeon Co.opmart Circle K GS25 FamilyMart 7-Eleven news 2026", country: "ALL", count: 3 })
+```
+
+⚠️ `country: "ALL"` — NEVER use "VN" (invalid, causes error)
+
+**Output target:**
+- 📈 Key Updates: 2-4 notable items across all chains
+- 🎯 Action: "No urgent items — market stable" OR specific action if needed
+
+---
+
+## Step 4: Today's Schedule
+
+**Command (EXACT):**
+```bash
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog calendar events --today --account tuananhtrinh919@gmail.com
+```
+
+⚠️ Use `events --today` NOT `events list --tz`
+
+**Output target:**
+- Group by time slot (Morning / Afternoon / Evening)
+- 🔥 on time-sensitive/interview items
+- Include leave requests from `/data/workspace/leave_requests.json`
+- Include printing orders from sheets
+
+**Printing Sheet command:**
+```bash
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog sheets get 1-O_B27mSDqfEZemD27bPNmWtfnV3cW51LeClBmSwB6c "Sheet1!A1:Z10" --account tuananhtrinh919@gmail.com
+```
+
+---
+
+## Step 5: Action Items for Boss
+
+Synthesize from all sections above into 3 buckets:
+- 🔥 **Urgent:** Time-sensitive today (interviews, deadlines, approvals)
+- 📋 **Review:** Items needing Boss attention but not urgent
+- 📊 **Monitor:** Background items to watch
+
+---
+
+## Step 6: Delivery
+
+```typescript
+message({
+  action: "send",
+  channel: "telegram",
+  to: "171900099",
+  message: "[compiled report using APPROVED TEMPLATE above]"
+})
+```
+
+---
+
+## Formatting Rules (STRICT)
+
+| Rule | Detail |
+|------|--------|
+| Dividers | `━━━━━━━━━━━━━━━━━━━━` between sections |
+| Urgency | 🔥 for time-sensitive items |
+| Bullets | `•` not `-` |
+| Sections | 📧 🤖 🏪 📅 ✨ |
+| Length | < 500 words (avoid truncation) |
+| Footer | Always end: `Ready for the day, Boss! 🫧` |
+
+---
+
+## Fallback
+
+```
+⚠️ Morning report errors:
+❌ [Section]: [Error detail]
+Boss please check manually.
+```
+
+---
+
+## Common Errors Reference
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `expected "<query>"` | Gmail missing query | Add `"is:unread OR is:important"` |
+| `unknown flag --tz` | Wrong calendar flag | Use `--today` not `--tz` |
+| `expected "<range>"` | Sheets missing range | Add `"Sheet1!A1:Z10"` |
+| `'VN' invalid country` | Wrong Brave param | Use `country: "ALL"` |
+| `no TTY for keyring` | Missing env var | Add `GOG_KEYRING_PASSWORD=openclaw_secure_2026` |
+| Report truncated | Wrong model | Use Sonnet 4.6, NEVER GLM-5 |
+
+---
+
+**⭐ Template approved by Boss: 2026-02-28**
+**Cập nhật:** 2026-02-28
+**Tác giả:** SpongeBot 🫧

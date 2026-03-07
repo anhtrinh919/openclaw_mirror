@@ -1,0 +1,67 @@
+# contacts.md — All Channels Contact Directory
+
+Consolidated contact list for Telegram, Discord, WhatsApp, and other channels.
+
+---
+
+## Primary Contact (Boss)
+
+| Name | Platform | User ID | Phone Number | Handle | Notes |
+|------|----------|---------|--------------|--------|-------|
+| Tuan Anh | Telegram | 171900099 | +84339637797 | @unknown | Primary user, Boss, Krusty Krab owner |
+| Tuan Anh | Discord | 556701373681631291 | — | @unknown | Same person, Discord DM |
+| Tuan Anh | WhatsApp | — | +84339637797 | — | Bot's own WhatsApp number |
+
+---
+
+## Telegram Contacts
+
+| Name | User ID | Phone Number | Handle | Notes |
+|------|---------|--------------|--------|-------|
+| Trâm Anh / Cô Cô | 6402311566 | — | @unknown | 26 tuổi, printing client, address as "cô cô / ca ca", informal vui vẻ style |
+| Chi Phan | 82510296 | — | @unknown | Allowlisted |
+| Hanh Bui | 1034926814 | — | @unknown | Allowlisted |
+| Cô Nhàn | 158396493 | — | @unknown | Allowlisted |
+
+### Telegram Groups
+
+| Group Name | Group ID | Notes |
+|------------|----------|-------|
+| Hội ăn trưa | -232384245 | Lunch/exercise reminders |
+| AI tổng hợp đơn | -5194157539 | SOP trade order group |
+| Nhóm test | -5187233312 | Testing, requireMention: true |
+| [Tên nhóm xin nghỉ] | -4121104521 | Leave request group, requireMention: true |
+
+---
+
+## Discord Contacts
+
+| Name | User ID | Handle | Notes |
+|------|---------|--------|-------|
+| Tuan Anh (Boss) | 556701373681631291 | @unknown | dmPolicy: pairing — other users need approval |
+
+---
+
+## WhatsApp Contacts
+
+| Name | Phone Number | Notes |
+|------|--------------|-------|
+| Tuan Anh (Boss) | +84339637797 | Bot's own WhatsApp number, primary user |
+| Nhung Nguyen | +84985989339 | Allowlisted |
+
+---
+
+## Field Legend
+
+| Field | Description |
+|-------|-------------|
+| Name | Display name or nickname |
+| Platform | telegram / discord / whatsapp / etc. |
+| User ID | Platform-specific numeric ID |
+| Phone Number | E.164 format (+countrycode...) |
+| Handle | @username (if available) |
+| Notes | Relationship, preferences, context |
+
+---
+
+Last updated: 2026-02-26 by SpongeBot 🫧
