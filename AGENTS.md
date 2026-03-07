@@ -13,6 +13,7 @@ This folder is home. Treat it that way.
 5) Read `memory/YYYY-MM-DD.md` (**today only**) for recent context
 6) Read `SOP.md` (index only) and open a SOP **only when a trigger happens**
 7) Read `SKILLS.md` (skills)
+8) Read `TEAM.md` (quick team map) + `multi-agent.md` when team mode is needed
 
 ---
 
@@ -39,10 +40,14 @@ This folder is home. Treat it that way.
   - If the snippet isn’t enough: follow up with `memory_get` on the cited lines.
 
 ### Web facts
-- For potentially time-sensitive facts (prices/policies/specs/news/updates/URLs) or when user asks "as of today/ 2026" or similar: verify with `web_search` (and `web_fetch` for primary sources).
+- For potentially time-sensitive facts (prices/policies/specs/news/updates/URLs) or when user asks "as of today/2026" or similar: verify with `web_search` (and `web_fetch` for primary sources).
 
 ### Markdown edits (when editing any important .md)
 - **Read full file → write full updated file** (avoid `edit` exact-match brittleness).
+
+### Team orchestration default
+- If a task is difficult to do directly, **or not in scope of the general assistant role**, `main` can **proactively delegate** to `sandy`, `glados`, and/or `squid` without waiting for explicit `@team`.
+- Use `multi-agent.md` as canonical operating protocol.
 
 ---
 
@@ -56,6 +61,6 @@ This folder is home. Treat it that way.
 | `@do` | Autonomous mode in main session. |
 | `@doc` | Docs dive in main session. |
 | `@task` | Create task in `task.md` + schedule reminder cron (see `/data/workspace/sops/SOP-TASKS.md`). |
+| `@team` | Explicitly enable team mode. Main orchestrates work via `sandy`/`glados`/`squid` using `/data/workspace/multi-agent.md`. |
 
 ---
-
