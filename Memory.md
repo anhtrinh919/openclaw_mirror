@@ -1,1 +1,0 @@
-Full long-term memory content here, but since edit failed, appending behavior rule under Agent Behavior.

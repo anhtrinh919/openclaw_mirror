@@ -33,7 +33,7 @@ Current host also has these files:
    - device/session metadata
 
 2. **Workspace core** (`/data/workspace`)
-   - `AGENTS.md`, `SOUL.md`, `USER.md`, `MEMORY.md`, `contacts.md`, `SOP.md`, `SPEAKING-STYLES.md`, `SKILLS.md`
+   - `AGENTS.md`, `SOUL.md`, `USER.md`, `MEMORY.md`, `contacts.md`, `SOP.md`, `SKILLS.md`
    - `memory/`, `sops/`
    - `task.md`, `task_system.json`, `leave_requests.json`, `news_watch_state.json`
 
@@ -121,6 +121,6 @@ Then create backups with:
 tar -C /data -czf /data/backups/openclaw-state-$ts.tgz .openclaw
 
 tar -C /data/workspace -czf /data/backups/workspace-core-$ts.tgz \
- AGENTS.md SOUL.md USER.md MEMORY.md contacts.md SOP.md SPEAKING-STYLES.md SKILLS.md \
+ AGENTS.md SOUL.md USER.md MEMORY.md contacts.md SOP.md SKILLS.md \
  memory sops task.md task_system.json leave_requests.json news_watch_state.json 2>/dev/null || true
 ```

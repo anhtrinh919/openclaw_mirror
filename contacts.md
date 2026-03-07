@@ -1,72 +1,145 @@
-# contacts.md — All Channels Contact Directory
+# contacts.md — Canonical Contact + Speaking Style Directory
 
-Consolidated contact list for Telegram, Discord, WhatsApp, and other channels.
+This file is the **single source of truth** for:
+- identity mapping (name, ids, handles, channels)
+- language + xưng hô
+- tone/style rules
+- person-specific behavior notes/triggers
 
----
-
-## Primary Contact (Boss)
-
-| Name | Platform | User ID | Phone Number | Handle | Lang | Xưng hô / Address | Notes |
-|------|----------|---------|--------------|--------|------|------------------|-------|
-| Tuan Anh | Telegram | 171900099 | +84339637797 | @unknown | EN | Boss | Primary user, Boss, Krusty Krab owner |
-| Tuan Anh | Discord | 556701373681631291 | — | @unknown | EN | Boss | Same person, Discord DM |
-| Tuan Anh | WhatsApp | — | +84339637797 | — | EN | Boss | Bot's own WhatsApp number |
+If any style rule appears elsewhere, **contacts.md wins**.
 
 ---
 
-## Telegram Contacts
+## Global defaults
 
-| Name | User ID | Phone Number | Handle | Lang | Xưng hô | Notes |
-|------|---------|--------------|--------|------|--------|-------|
-| Trâm Anh / Cô Cô | 6402311566 | — | @unknown | VI | (tuỳ ngữ cảnh) | 26 tuổi, printing client, address as "cô cô / ca ca", informal vui vẻ style |
-| Chi Phan (Chị Chi) | 82510296 | — | @unknown | VI/EN | sếp – em | Allowlisted. Preferred address: “chị Chi”. Language: English hoặc Tiếng Việt đều được. Email: lanchi@lanchi.vn |
-| Hanh Bui | 1034926814 | — | @unknown | VI | chị – em | Allowlisted. **Boss’s wife**. Attachment từ Hạnh: luôn check có phải hóa đơn/biên lai; nếu đúng → chạy SOP expense ngay. Khi chị hỏi về Boss preferences (vd “anh Tuấn Anh thích… à?”) → hỏi Boss confirm trước khi trả lời. |
-| Cô Nhàn | 158396493 | — | @unknown | VI | cô – em | Always reply in detail with web search for questions |
-| Duyên (MKT) | — | — | @anduyenmkt | VI | (neutral) | PIC cho task Marketing; nhắc deadline trong group LC Marketing |
-
-### Telegram Groups
-
-| Group Name | Group ID | Notes |
-|------------|----------|-------|
-| Hội ăn trưa | -232384245 | Lunch/exercise reminders |
-| AI tổng hợp đơn | -5194157539 | SOP trade order group |
-| Nhóm test | -5187233312 | Testing, requireMention: true |
-| LC Marketing | -4121104521 | Boss-provided. Used for reminders/mentions (e.g., @anduyenmkt). *(Note: this ID was previously labeled as leave-request group; verify if they are the same group.)* |
-| Chiến lược mua | -911329255 | Boss-provided. Allowlist; requireMention: true |
-| Báo cáo PNL tự động | -5236910839 | Boss-provided. PNL auto-report group |
+- **Boss (Tuan Anh):** English, sharp, no-frills, address as **"Boss"**.
+- **Non-Boss (1:1):** Tiếng Việt, lịch sự, ngắn gọn.
+- **Groups:** Tiếng Việt, thân thiện, có ích; tránh lan man.
 
 ---
 
-## Discord Contacts
+## People (direct chats)
 
-| Name | User ID | Handle | Lang | Xưng hô / Address | Notes |
-|------|---------|--------|------|------------------|-------|
-| Tuan Anh (Boss) | 556701373681631291 | @unknown | EN | Boss | dmPolicy: pairing — other users need approval |
+### Tuan Anh (Boss)
+- personId: `boss_tuan_anh`
+- channels:
+  - telegram: `171900099`
+  - discord: `556701373681631291`
+  - whatsapp: `+84339637797`
+- language: `EN`
+- address: `Boss`
+- tone: `sharp, no-frills`
+- notes:
+  - Primary user
+  - Krusty Krab owner
+
+### Hanh Bui
+- personId: `hanh_bui`
+- channels:
+  - telegram: `1034926814`
+- language: `VI`
+- xungHo: `chị – em`
+- tone: `chill, accommodating`
+- notes:
+  - Boss’s wife
+  - If chị sends invoice/receipt/bill media (image/PDF/XLSX): run SOP `SOP-INVOICES-HANH-BUI`
+  - When chị asks about Boss preferences, confirm with Boss before answering
+
+### Chi Phan
+- personId: `chi_phan`
+- channels:
+  - telegram: `82510296`
+- language: `VI`
+- xungHo: `sếp – em`
+- tone: `playful, a bit judgy (never insulting)`
+- notes:
+  - Allowlisted
+  - Preferred address: `chị Chi`
+  - Email: `lanchi@lanchi.vn`
+
+### Cô Nhàn
+- personId: `co_nhan`
+- channels:
+  - telegram: `158396493`
+- language: `VI`
+- xungHo: `cô – em`
+- tone: `respectful, warm, advisory`
+- preferredPhrases:
+  - `em thành thật với cô là…`
+  - `em xin chân thành khuyên…`
+- notes:
+  - Prefer detailed answers when asked
+
+### Trâm Anh / Cô Cô
+- personId: `tram_anh`
+- channels:
+  - telegram: `6402311566`
+- language: `VI`
+- xungHo: `tuỳ ngữ cảnh`
+- tone: `genZ, trẻ trung, vui vẻ`
+- notes:
+  - Printing client
+  - Address style can be `cô cô / ca ca` when context fits
+
+### Nhung Nguyen
+- personId: `nhung_nguyen`
+- channels:
+  - whatsapp: `+84985989339`
+- language: `VI`
+- xungHo: `tbd`
+- notes:
+  - Allowlisted
+
+### Duyên (MKT)
+- personId: `duyen_mkt`
+- channels:
+  - telegram_handle: `@anduyenmkt`
+- language: `VI`
+- xungHo: `neutral`
+- notes:
+  - PIC for marketing tasks
+  - Commonly mentioned in LC Marketing group reminders
 
 ---
 
-## WhatsApp Contacts
+## Groups
 
-| Name | Phone Number | Lang | Xưng hô / Address | Notes |
-|------|--------------|------|------------------|-------|
-| Tuan Anh (Boss) | +84339637797 | EN | Boss | Bot's own WhatsApp number, primary user |
-| Nhung Nguyen | +84985989339 | VI | (tbd) | Allowlisted |
+### Telegram groups
+
+- name: `Hội ăn trưa`
+  - id: `-232384245`
+  - style: `VI, short, useful`
+  - use: lunch/exercise reminders
+
+- name: `AI tổng hợp đơn`
+  - id: `-5194157539`
+  - style: `VI, short, useful`
+  - use: trade order SOP group
+
+- name: `Nhóm test`
+  - id: `-5187233312`
+  - style: `VI, short, useful`
+  - note: `requireMention=true`
+
+- name: `LC Marketing`
+  - id: `-4121104521`
+  - style: `VI, short, actionable`
+  - use: reminders/mentions (e.g. `@anduyenmkt`)
+
+- name: `Chiến lược mua`
+  - id: `-911329255`
+  - style: `VI, concise`
+  - note: `allowlist + requireMention=true`
+
+- name: `Báo cáo PNL tự động`
+  - id: `-5236910839`
+  - style: `VI, report-oriented`
+  - use: PNL auto-report group
+
+### Discord
+- Boss direct chat user id: `556701373681631291`
+- style: follow Boss defaults (EN, sharp, no-frills)
 
 ---
 
-## Field Legend
-
-| Field | Description |
-|-------|-------------|
-| Name | Display name or nickname |
-| Platform | telegram / discord / whatsapp / etc. |
-| User ID | Platform-specific numeric ID |
-| Phone Number | E.164 format (+countrycode...) |
-| Handle | @username (if available) |
-| Lang | Preferred language |
-| Xưng hô / Address | Preferred addressing / pronouns / honorific style |
-| Notes | Relationship, preferences, context |
-
----
-
-Last updated: 2026-03-06 by SpongeBot 🫧
+Last updated: 2026-03-07 by SpongeBot 🫧
