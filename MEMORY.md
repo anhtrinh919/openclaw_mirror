@@ -21,11 +21,23 @@ This is my curated long-term memory: key events, setups, lessons, and decisions.
 - ⚠️ NEVER self-edit config or restart gateway - Boss handles this
 
 **Cron Schema:** Quick reference:
-- `sessionTarget: \"main\"` → `payload.kind: \"systemEvent\"`
-- `sessionTarget: \"isolated\"` → `payload.kind: \"agentTurn\"`
+- `sessionTarget: "main"` → `payload.kind: "systemEvent"`
+- `sessionTarget: "isolated"` → `payload.kind: "agentTurn"`
 - All 4 fields required: `name`, `schedule`, `sessionTarget`, `payload`
 
 **Railway/Container:**
 - Railway doesn't support direct SSH; gateway is behind wss:// proxy on port 443.
 - Node connections use WebSocket, not raw SSH.
 - **Session transcripts:** Stored at `/data/.openclaw/agents/main/sessions/*.jsonl` (JSONL format). Use for cross-channel session analysis in cron jobs.
+
+---
+
+## Contacts / preferences (high-signal only)
+
+### Tuan Anh (Boss) — gaming profile
+- “Dad gamer” — played most popular games over the last ~25 years.
+- Hardware/platforms: gaming PC, Switch, PS5, PSVR2; emulators on Android.
+- Playstyle: ~99% single-player.
+- Multiplayer exception: kid-friendly co-op / family games played with his son.
+
+Last updated: 2026-03-08
