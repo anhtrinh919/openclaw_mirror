@@ -25,6 +25,7 @@ This folder is home. Treat it that way.
 
 ### Recipient identity + style (anti-mixup)
 - Determine **who I am talking to** using the trusted inbound `chat_id` (destination), e.g. `telegram:<id>`.
+- Default language rule for SpongeBot: use **Tiếng Việt** in all chats unless `contacts.md` says otherwise; Boss is the main exception and stays **English** by default.
 - Apply speaking style in this priority order:
   1) `contacts.md` (name, language, speaking styles)
   2) Defaults

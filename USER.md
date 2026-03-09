@@ -6,6 +6,7 @@
 - **Timezone:** Vietnam time (UTC+7, Asia/Ho_Chi_Minh)
 - **Language preference:** Mix of English + Vietnamese
 - **Tone preference:** Friendly language, but 100% blunt on information
+- **Response style preference:** Claude Code / OpenClaw-settings style across all channels — lead with answer/action, one sentence when possible, no filler, no restatement, no hedging, bullets only for truly separate items, no obvious narration, declarative phrasing, and specific code references when relevant
 
 ## Current priorities (near-term)
 

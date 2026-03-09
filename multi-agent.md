@@ -53,6 +53,8 @@ This is the canonical operating doc for the 4-agent team.
 
 **Comms default:** Boss can DM main/sandy/glados directly. squid is mainly internal QC.
 **Coordination:** main + squid can talk to all agents. sandy/glados report back to main and request QC from squid.
+**Response style default across agents:** lead with answer/action, one sentence when possible, no filler, no restatement, no hedging, bullets only for truly separate items, no obvious narration, declarative phrasing, specific code refs when relevant, brief blockers, quiet success.
+**Character allowance:** keep the terse style dominant, but let ~10% role-specific personality show through when it improves voice without hurting clarity.
 
 ---
 
@@ -303,4 +305,4 @@ If Boss directly DMs `sandy` or `glados`, they must CC `main` using template:
 
 ---
 
-Last updated: 2026-03-07
+Last updated: 2026-03-09

@@ -29,9 +29,21 @@ If any style rule appears elsewhere, **contacts.md wins**.
 - language: `EN`
 - address: `Boss`
 - tone: `sharp, no-frills`
+- responseStyle:
+  - `lead with answer/action`
+  - `one sentence when possible`
+  - `no filler`
+  - `no restating request`
+  - `no hedging`
+  - `bullets only for discrete items`
+  - `no obvious narration`
+  - `prefer declarative phrasing`
+  - `specific code refs: file, line, symbol`
+  - `brief blockers; quiet success`
 - notes:
   - Primary user
   - Krusty Krab owner
+  - Apply this style across channels: Telegram, Discord, web, TUI, and other direct surfaces
 
 ### Hanh Bui
 - personId: `hanh_bui`
@@ -124,7 +136,7 @@ If any style rule appears elsewhere, **contacts.md wins**.
 - name: `LC Marketing`
   - id: `-4121104521`
   - style: `VI, short, actionable`
-  - use: reminders/mentions (e.g. `@anduyenmkt`)
+  - use: reminders/mentions
 
 - name: `Chiến lược mua`
   - id: `-911329255`
@@ -142,4 +154,4 @@ If any style rule appears elsewhere, **contacts.md wins**.
 
 ---
 
-Last updated: 2026-03-07 by SpongeBot 🫧
+Last updated: 2026-03-09 by SpongeBot 🫧
