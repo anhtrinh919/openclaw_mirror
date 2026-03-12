@@ -21,6 +21,8 @@ Miscellaneous tasks that don't fit the above categories – general reminders, l
 ## Tasks
 
 ### Personal
+- **TASK-20260312-01** | check on and finish task for chị Nhàn | PIC: Tuan Anh | Deadline: 2026-03-12 14:00 (VN) | Chat: telegram:171900099 | Reminder: efc7774b-91f3-4d84-82c1-5c5b32954428 ✅ | Status: pending
+
 - **TASK-20260310-01** | ngồi vs cô Nhàn & Hòa về người phụ trách quy trình | PIC: Tuan Anh | Deadline: 2026-03-12 (Thu) | Chat: telegram:171900099 | Reminder: 1b7c3854-b5eb-468f-9b16-4bf80b9b8170 ✅ | Status: pending
 
 - **TASK-20260309-01** | finalize the supplier sponsor deck for 30/4 - 1/5 (PRIORITY) | PIC: Tuan Anh | Deadline: 2026-03-09 | Chat: telegram:171900099 | Reminder: disabled (781ba8de-1ecc-4641-8c39-a930c02c1352, 14f60380-5075-4eea-ab49-ece3ab725847, e8e4380e-0c9c-4f9a-a4bb-efc4e65ccb88, a1e2689d-3b97-41a4-ac9b-1890cc86f02e, 805be8a6-6c5b-438d-b3d5-487db9f6f6aa) ✅ | Status: done ✅ (same as TASK-20260306-03)
@@ -55,6 +57,7 @@ Miscellaneous tasks that don't fit the above categories – general reminders, l
 
 | ID | Created | Description | PIC | Deadline | Bucket | Origin Chat | Reminder Set | Status |
 |----|---------|-------------|-----|----------|---------|-------------|--------------|--------|
+| TASK-20260312-01 | 2026-03-12T02:35:00Z | check on and finish task for chị Nhàn | Tuan Anh | 2026-03-12 14:00 (VN) | personal | telegram:171900099 | ✅ efc7774b-91f3-4d84-82c1-5c5b32954428 | pending |
 | TASK-20260302-01 | 2026-03-02T00:40:00Z | playland mar forecast | Tuan Anh | 2026-03-03 | personal | telegram:171900099 | ✅ 26addfc0-6071-4377-bd30-135bb4e4448e | done |
 | TASK-20260302-02 | 2026-03-02T00:47:00Z | check yesterday’s promo performance (pwp & combo) | Tuan Anh | 2026-03-02 11:00 (VN) | personal | telegram:171900099 | ✅ b7f9488b-41eb-4c95-a3a6-ce0c87de7c75 | done |
 | TASK-20260303-01 | 2026-03-03T03:57:00Z | đề xuất NCC 30/4 — Duyên draft | Duyên | 2026-03-05 | staff | telegram:171900099 | ✅ e79dacca-cb2b-4cb3-a5e2-a4837eaea669 | pending |
@@ -97,5 +100,5 @@ Miscellaneous tasks that don't fit the above categories – general reminders, l
 **Reminder:** Cron job created at 12:00 PM (Vietnam time) on deadline date, sent to original chat.
 
 ---
-Last updated: 2026-03-10
+Last updated: 2026-03-12
 Author: SpongeBot 🫧

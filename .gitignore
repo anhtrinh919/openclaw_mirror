@@ -1,0 +1,51 @@
+.git/
+.openclaw/
+.pi/
+node_modules/
+.venv*/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.tmp
+scratch/
+
+# Keep mirror lightweight + safe by default (document-first)
+*.json
+*.xlsx
+*.xls
+*.xlsm
+*.pptx
+*.pdf
+*.csv
+*.zip
+*.tar
+*.gz
+
+# Secrets / credentials
+.env
+*.env
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*_secret*
+*secret*.json
+*token*
+*auth*
+
+# Known sensitive files in this workspace
+.dust_api_key
+.gemini_api_key
+gog_client_secret.json
+gog_auth_backup.json
+dust_profile.json
+memory/*openclaw-backup*.md
+memory/*onlyfans*.md
+
+# Large transient output folders
+tmp/
+out/

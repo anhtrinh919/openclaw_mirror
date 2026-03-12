@@ -20,6 +20,13 @@ This is my curated long-term memory: key events, setups, lessons, and decisions.
 **Config & Gateway:**
 - ⚠️ NEVER self-edit config or restart gateway - Boss handles this
 
+**Telegram send protocol - 2026-03-12:**
+- ⚠️ `sessions_send` to a Telegram group session is **NOT** reliable for posting a real Telegram message.
+- Group-session relay patterns can return `RELAY_OK` / show internal echoes while **nothing is actually posted** to Telegram.
+- For real outbound Telegram messages, use the **direct send path**: `openclaw message send --channel telegram --target <chatId> --message '<text>' --json`
+- Success proof must be the plugin send result with `payload.ok=true`, real `chatId`, and `messageId` (example: group `-232384245` succeeded with messageId `3222`).
+- If needed, verify against gateway logs for `action: "send"` rather than session transcripts alone.
+
 **Cron Schema:** Quick reference:
 - `sessionTarget: "main"` → `payload.kind: "systemEvent"`
 - `sessionTarget: "isolated"` → `payload.kind: "agentTurn"`
@@ -40,4 +47,4 @@ This is my curated long-term memory: key events, setups, lessons, and decisions.
 - Playstyle: ~99% single-player.
 - Multiplayer exception: kid-friendly co-op / family games played with his son.
 
-Last updated: 2026-03-08
+Last updated: 2026-03-12
