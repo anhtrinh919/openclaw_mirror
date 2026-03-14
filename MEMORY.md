@@ -7,9 +7,22 @@ This is my curated long-term memory: key events, setups, lessons, and decisions.
 ## Key Setups
 
 ### gog
-- **Gog Auth - 2026-02-25:** Tokens stored in keyring at `/home/openclaw/.config/gogcli/keyring/` (NOT a flat file — disappears on container restart!). Client secret at `/data/workspace/gog_client_secret.json`. Backup token (with `email` field): `/data/workspace/gog_auth_backup.json`. Account: `tuananhtrinh919@gmail.com`. Services: calendar, drive, gmail, sheets. Use `GOG_KEYRING_PASSWORD=openclaw_secure_2026`.
-- Container restarts wipe the gog keyring → must re-import tokens manually.
-- **⚠️ RESTORE AFTER RESTART:** `GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth credentials /data/workspace/gog_client_secret.json && GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth tokens import /data/workspace/gog_auth_backup.json`
+- **Gog Auth - 2026-02-25 / refreshed 2026-03-13:** Tokens live in keyring at `/home/openclaw/.config/gogcli/keyring/` and the persistent backup token lives at `/data/workspace/gog_auth_backup.json`.
+- **Client secret:** `/data/workspace/gog_client_secret.json`
+- **Account:** `tuananhtrinh919@gmail.com`
+- **Password env:** `GOG_KEYRING_PASSWORD=openclaw_secure_2026`
+- **Canonical SOP:** `/data/workspace/sops/SOP-GOG-AUTH.md`
+- **Canonical binary:** `/home/linuxbrew/.linuxbrew/bin/gog` (fallback: `gog`)
+- **Current intended services:** gmail, calendar, drive, sheets, tasks, contacts, docs, slides, people, forms, appscript
+- Container restarts can wipe the keyring state, so Google workflows should follow `SOP-GOG-AUTH.md` Step 0 before using `gog`.
+- **Critical rule:** do not duplicate raw gog auth restore commands across SOPs or cron prompts; point them to `SOP-GOG-AUTH.md` instead.
+
+### Telegram scheduled-send heartbeat monitor
+- **Added 2026-03-14:** heartbeat-side monitor lives at `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`.
+- **State:** `/data/workspace/ops/telegram-send-monitor/state.json`
+- **Incidents log:** `/data/workspace/ops/telegram-send-monitor/incidents.jsonl`
+- **Contract:** it should alert only on **new** failed scheduled Telegram sends by inspecting `openclaw cron list --json` and `openclaw cron runs --id ...`, then deduping by `jobId:runAtMs`.
+- **Heartbeat wiring:** `HEARTBEAT.md` should run the script with `--print-alert`; empty stdout means no alert.
 
 ---
 
@@ -47,4 +60,4 @@ This is my curated long-term memory: key events, setups, lessons, and decisions.
 - Playstyle: ~99% single-player.
 - Multiplayer exception: kid-friendly co-op / family games played with his son.
 
-Last updated: 2026-03-12
+Last updated: 2026-03-14

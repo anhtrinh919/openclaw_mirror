@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local runtime state
+.env
+state/
+logs/
+output/
+*.session
+*.session-journal

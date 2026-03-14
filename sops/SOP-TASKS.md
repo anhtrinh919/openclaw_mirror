@@ -37,7 +37,7 @@ Bot: Append task to task.md + log table
     ↓
 Bot: (If PIC=Boss and Google Tasks enabled) create Google Tasks item
     ↓
-Bot: Create cron reminder (12pm deadline, send to original chat_id)
+Bot: Create reminder cron (12pm deadline, send to original chat_id)
     ↓
 Bot: Reply "✅ Task created in [bucket]. Reminder set."
 ```
@@ -84,6 +84,12 @@ Notes:
 - Google Tasks due time may be ignored; include time in title/notes if needed (e.g., "(Wed 08:00 VN)").
 
 ### Bước 4: Create Reminder Cron
+**Canonical Telegram send path for reminders:**
+- Use `/data/workspace/ops/send_telegram_verified.sh`
+- Never use `message(...)` inside the cron payload for Telegram reminders
+- Success proof must come from the verified sender script (`ok=true`, expected `chatId`, real `messageId`)
+- For heartbeat-based failure alerts on these scheduled sends, monitor `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`
+
 **Cron tool call (EXACT):**
 ```json
 {
@@ -92,7 +98,13 @@ Notes:
     "name": "task-reminder-TASK-YYYYMMDDNN",
     "schedule": { "kind": "at", "at": "[YYYY-MM-DD 12:00:00 Asia/Ho_Chi_Minh]" },
     "sessionTarget": "isolated",
-    "payload": { "kind": "agentTurn", "message": "Send reminder: '🔥 Reminder: [Description] (PIC: [PIC], Deadline: [Date])' to Telegram chat [chat_id]. Use message(action=send, channel=telegram, to=[chat_id], message=...). Model: openrouter/anthropic/claude-sonnet-4.6, thinking=low." },
+    "payload": {
+      "kind": "agentTurn",
+      "message": "Use exec to run this exact command and do not use message(...): /data/workspace/ops/send_telegram_verified.sh [chat_id] '🔥 Reminder: [Description] (PIC: [PIC], Deadline: [Date])' . If the command exits 0, reply NO_REPLY. If it fails, return the command error briefly.",
+      "model": "openrouter/anthropic/claude-sonnet-4.6",
+      "thinking": "low",
+      "timeoutSeconds": 30
+    },
     "delivery": { "mode": "none" },
     "enabled": true
   }
@@ -117,9 +129,9 @@ Boss wants: when he marks done in Google Tasks, bot updates Sheet automatically.
 
 Implementation:
 - Cron job runs **1x/day** (current: 18:00 Asia/Ho_Chi_Minh).
-- It restores gog auth (keyring can disappear after container restart) before any API calls.
-  - Correct restore command (important: `credentials set`):
-    `GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth credentials set /data/workspace/gog_client_secret.json --no-input && GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth tokens import /data/workspace/gog_auth_backup.json --no-input`
+- It must read and follow `/data/workspace/sops/SOP-GOG-AUTH.md` before any `gog` call.
+  - Use **Step 0** for restore.
+  - Do not duplicate raw restore commands in the cron prompt.
 - It reads `/data/workspace/task_system.json` for `tasklistId` + `spreadsheetId`.
 - It fetches Google Tasks **including completed** + **all pages**:
   - `gog tasks list <tasklistId> --all --show-hidden --show-completed ...`
@@ -133,6 +145,7 @@ Implementation:
 - **Cron fail:** Retry once; if fail, "❌ Manual reminder needed—logged in task.md".
 - **Google Tasks fail:** Log in task.md Notes; proceed without blocking.
 - **Cross-chat:** Reminders only Telegram (if origin non-Telegram, send to Boss DM 171900099).
+- **Scheduled Telegram send failures:** let heartbeat surface only **new** failures via `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`.
 
 ---
 
@@ -141,9 +154,12 @@ Implementation:
 - **System config:** `/data/workspace/task_system.json`
 - **Canonical sheet:** see `/data/workspace/task_system.json` → `task_tracker_sheet`
 - **Cron sync job:** `tasks-sync-google-tasks-to-sheet-daily`
+- **Google auth SOP:** `/data/workspace/sops/SOP-GOG-AUTH.md`
+- **Verified Telegram sender:** `/data/workspace/ops/send_telegram_verified.sh`
+- **Telegram send failure heartbeat monitor:** `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`
 - **Contacts for PIC:** `/data/workspace/contacts.md`
 
 ---
 
-**Cập nhật:** 2026-03-03  
+**Cập nhật:** 2026-03-14  
 **Tác giả:** SpongeBot 🫧

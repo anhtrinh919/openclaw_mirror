@@ -138,6 +138,10 @@ If any style rule appears elsewhere, **contacts.md wins**.
   - style: `VI, short, actionable`
   - use: reminders/mentions
 
+- name: `LC Trade Marketing`
+  - id: `-4634490350`
+  - style: `VI, short, actionable`
+
 - name: `Chiến lược mua`
   - id: `-911329255`
   - style: `VI, concise`
@@ -154,4 +158,4 @@ If any style rule appears elsewhere, **contacts.md wins**.
 
 ---
 
-Last updated: 2026-03-09 by SpongeBot 🫧
+Last updated: 2026-03-13 by SpongeBot 🫧

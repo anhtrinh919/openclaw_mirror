@@ -1,0 +1,5 @@
+# One target per line. Examples:
+# my_saved_messages
+# @publicchannel
+# -1001234567890
+# Some Exact Chat Title

@@ -14,6 +14,7 @@ This is the canonical operating doc for the 4-agent team.
 - Master operating doc (this file): `/data/workspace/multi-agent.md`
 - Original v1 source spec: `/data/workspace/multi-agent-operating-spec-v1.md`
 - Quick team index: `/data/workspace/TEAM.md`
+- Live routing map: `/data/workspace/TEAM-ROUTING.md`
 
 ### Agent workspaces
 - `main`: `/data/workspace`
@@ -51,8 +52,9 @@ This is the canonical operating doc for the 4-agent team.
 | glados | GLaDOS | Data / Reporting / Decks | Yes (Boss DM) | reports + xlsx + pptx + analysis artifacts |
 | squid | Squidward | Architect / Planner / QC Gate | Optional (usually internal) | PLAN rubric + QC_REPORT + verdict |
 
-**Comms default:** Boss can DM main/sandy/glados directly. squid is mainly internal QC.
-**Coordination:** main + squid can talk to all agents. sandy/glados report back to main and request QC from squid.
+**Comms default:** Boss can DM main/sandy/glados directly where routing exists. squid is mainly internal QC.
+**Routing reality:** see `/data/workspace/TEAM-ROUTING.md`.
+**Current practical rule:** on Telegram, Boss talks to `main`; `main` delegates internally. Direct named-agent user conversations are already live on Discord, not Telegram.
 **Response style default across agents:** lead with answer/action, one sentence when possible, no filler, no restatement, no hedging, bullets only for truly separate items, no obvious narration, declarative phrasing, specific code refs when relevant, brief blockers, quiet success.
 **Character allowance:** keep the terse style dominant, but let ~10% role-specific personality show through when it improves voice without hurting clarity.
 
@@ -106,7 +108,7 @@ Global index:
 | Write `/deliverables/*` | ✅ | ✅ | ✅ | ✅ (QC + plan docs only) |
 | Write `/shared/*` | ⚠️ limited | ✅ primary | ⚠️ templates only | ❌ |
 | Shell/exec | ⚠️ minimal | ✅ | ⚠️ limited | ❌ default |
-| Outbound messaging to Boss | ✅ | ✅ own DM | ✅ own DM | ⚠️ usually no |
+| Outbound messaging to Boss | ✅ | ✅ own DM where routed | ✅ own DM where routed | ⚠️ usually no |
 | GitHub ops | ⚠️ review | ✅ owner | ⚠️ optional | ❌ |
 | ClawHub skill mgmt | ❌ | ✅ explicit approval | ❌ | ❌ |
 | Dust relay ops | ⚠️ oversight | ⚠️ as needed | ✅ owner | ❌ |
@@ -216,6 +218,14 @@ BLOCKERS: <none|...>
 ### 5.2 Builder↔Data direct messaging
 Default is **no direct** Sandy↔GLaDOS coordination. Route via `main` (and QC via `squid`).
 
+### 5.3 Canonical team route by surface
+- **Telegram:** Boss → `main`; `main` delegates internally using `sessions_send` to:
+  - `agent:sandy:main`
+  - `agent:glados:main`
+  - `agent:squid:main`
+- **Discord:** direct named-agent conversations can exist where bindings/accounts are configured.
+- Do **not** rely on named `sessions_spawn` as the primary team path for Telegram orchestration.
+
 ---
 
 ## 6) Heartbeat / check-ins
@@ -305,4 +315,4 @@ If Boss directly DMs `sandy` or `glados`, they must CC `main` using template:
 
 ---
 
-Last updated: 2026-03-09
+Last updated: 2026-03-13

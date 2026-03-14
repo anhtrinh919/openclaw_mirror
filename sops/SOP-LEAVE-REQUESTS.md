@@ -12,6 +12,37 @@ Quy trình xử lý yêu cầu xin nghỉ từ nhân viên trong group Telegram 
 
 ---
 
+## Hard Trigger Rule
+
+This SOP should be treated as a **hard route**, not a soft suggestion, in the highest-confidence case below.
+
+### Immediate hard trigger
+If trusted inbound metadata shows:
+- `chat_id = telegram:-4121104521`, and
+- message text contains the word `nghỉ`
+
+then the assistant must:
+1. immediately open and follow this SOP,
+2. parse the leave request instead of replying as normal chat,
+3. proceed without requiring `@xinnghi`, `/xinnghi`, or a bot mention.
+
+### Workflow continuity rule
+After this SOP is triggered for a given leave request/thread, keep treating subsequent related follow-up turns as part of the same leave workflow until one of these happens:
+- the leave request is approved,
+- the leave request is rejected,
+- the user clearly changes topic,
+- or the user explicitly says to stop/cancel.
+
+So follow-up shorthand like:
+- “nghỉ mai nhé”
+- “nghỉ 1 ngày thôi”
+- “lý do việc riêng”
+- “duyệt giúp em”
+
+should stay inside this SOP context rather than falling back to generic chat behavior.
+
+---
+
 ## Config
 
 **Group:** `-4121104521` (requireMention: true, groupPolicy: open)
@@ -24,7 +55,7 @@ Quy trình xử lý yêu cầu xin nghỉ từ nhân viên trong group Telegram 
 ## Luồng Chính
 
 ```
-User mention + trigger (@xinnghi / /xinnghi / "xin nghỉ")
+User nói về nghỉ phép / nghỉ làm trong group
     ↓
 Bot: Parse ngày nghỉ + lý do (hoặc hỏi lại)
     ↓
@@ -36,7 +67,7 @@ Boss reply "duyệt" hoặc "từ chối"
     ↓
 If approved:
     - Bot: Reply group "@user Đã duyệt"
-    - Bot: Tạo calendar event (restore gog auth trước)
+    - Bot: Tạo calendar event (follow SOP-GOG-AUTH first)
 If rejected:
     - Bot: Reply group "@user Đã từ chối"
 ```
@@ -47,7 +78,11 @@ If rejected:
 
 ### Bước 1: Trigger Detection
 
-**Trigger patterns** (trong group -4121104521):
+**Hard trigger:**
+- trusted inbound `chat_id = telegram:-4121104521`
+- message text contains `nghỉ`
+
+**Secondary trigger patterns** (trong group -4121104521):
 - Mention bot + `@xinnghi`
 - Mention bot + `/xinnghi`
 - Mention bot + "xin nghỉ"
@@ -106,10 +141,12 @@ Reply "duyệt" để approve hoặc "từ chối" để reject.
 **Boss reply:** "duyệt" → Approved | "từ chối" → Rejected
 
 #### Pre-flight (auth restore)
-```bash
-GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth credentials /data/workspace/gog_client_secret.json && \
-GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth tokens import /data/workspace/gog_auth_backup.json
-```
+Before any `gog` call, read and follow:
+- `/data/workspace/sops/SOP-GOG-AUTH.md`
+
+Use:
+- **Step 0** for auth restore
+- **Step 1** if you need to verify health before calendar write
 
 #### Calendar creation
 
@@ -140,5 +177,5 @@ GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog calendar create tuananhtrinh919@gm
 
 ---
 
-**Cập nhật:** 2026-03-04
+**Cập nhật:** 2026-03-13
 **Tác giả:** SpongeBot 🫧

@@ -102,10 +102,13 @@ Ready for the day, Boss! 🫧
 
 ## Step 0: Pre-Flight (ALWAYS FIRST)
 
-```bash
-GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth credentials /data/workspace/gog_client_secret.json && \
-GOG_KEYRING_PASSWORD=openclaw_secure_2026 gog auth tokens import /data/workspace/gog_auth_backup.json
-```
+Before any `gog` call, read and follow:
+- `/data/workspace/sops/SOP-GOG-AUTH.md`
+
+Use:
+- **Step 0** for auth restore
+- **Step 1** if you need a quick health check
+- retry restore once if it fails
 
 **Quality gate rules:**
 - Test EACH tool before compiling
@@ -239,10 +242,11 @@ Boss please check manually.
 | `unknown flag --tz` | Wrong calendar flag | Use `--today` not `--tz` |
 | `expected "<range>"` | Sheets missing range | Add `"Sheet1!A1:Z10"` |
 | `'VN' invalid country` | Wrong Brave param | Use `country: "ALL"` |
-| `no TTY for keyring` | Missing env var | Add `GOG_KEYRING_PASSWORD=openclaw_secure_2026` |
+| `no TTY for keyring` | Missing env var | Follow `/data/workspace/sops/SOP-GOG-AUTH.md` Step 0 |
+| `invalid_grant` | Token revoked / stale backup | Follow `SOP-GOG-AUTH.md` Step 2 → Step 4 |
 | Report truncated | Too verbose output | Reduce words; keep template + <500 words |
 
 ---
 
-**Cập nhật:** 2026-02-28
+**Cập nhật:** 2026-03-13
 **Tác giả:** SpongeBot 🫧

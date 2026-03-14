@@ -8,11 +8,13 @@ Rule: read this index at session start; open ONLY the relevant SOP file when a t
 ## SOP List
 
 ### SOP-TRADE-PRINTING (Printing orders)
-- Trigger: Trâm Anh (Telegram 6402311566) or group -5194157539 sends Excel/screenshot printing order.
+- Hard trigger: trusted inbound `chat_id = telegram:-5194157539` + Excel attachment (`.xlsx` / spreadsheet file) → immediately open `/data/workspace/sops/SOP-TRADE-PRINTING.md`.
+- Secondary trigger: Trâm Anh (Telegram 6402311566) sends Excel/screenshot printing order.
 - File: `/data/workspace/sops/SOP-TRADE-PRINTING.md`
 
 ### SOP-LEAVE-REQUESTS (Xin nghỉ)
-- Trigger: group -4121104521 mention + `@xinnghi` / `/xinnghi` / "xin nghỉ".
+- Hard trigger: trusted inbound `chat_id = telegram:-4121104521` + message text contains `nghỉ` → immediately open `/data/workspace/sops/SOP-LEAVE-REQUESTS.md`.
+- Secondary trigger: group -4121104521 mention + `@xinnghi` / `/xinnghi` / "xin nghỉ".
 - File: `/data/workspace/sops/SOP-LEAVE-REQUESTS.md`
 
 ### SOP-MORNING-REPORT
@@ -31,7 +33,11 @@ Rule: read this index at session start; open ONLY the relevant SOP file when a t
 - Trigger: Hanh Bui (Telegram 1034926814) sends (or Boss forwards) a receipt/invoice **attachment** (image/PDF/XLSX).
 - File: `/data/workspace/sops/SOP-INVOICES-HANH-BUI.md`
 
+### SOP-TELEGRAM-ATTACHMENT-SEND
+- Trigger: SpongeBot needs to send a real file attachment to Telegram.
+- File: `/data/workspace/sops/SOP-TELEGRAM-ATTACHMENT-SEND.md`
+
 ---
 
-Last updated: 2026-03-04
+Last updated: 2026-03-13
 Author: SpongeBot 🫧
