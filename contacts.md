@@ -6,7 +6,7 @@ This file is the **single source of truth** for:
 - tone/style rules
 - person-specific behavior notes/triggers
 
-If any style rule appears elsewhere, **contacts.md wins**.
+contacts.md is canonical for per-person identity, language, and tone. For response style rules, SOUL.md is canonical.
 
 ---
 
@@ -29,17 +29,7 @@ If any style rule appears elsewhere, **contacts.md wins**.
 - language: `EN`
 - address: `Boss`
 - tone: `sharp, no-frills`
-- responseStyle:
-  - `lead with answer/action`
-  - `one sentence when possible`
-  - `no filler`
-  - `no restating request`
-  - `no hedging`
-  - `bullets only for discrete items`
-  - `no obvious narration`
-  - `prefer declarative phrasing`
-  - `specific code refs: file, line, symbol`
-  - `brief blockers; quiet success`
+- responseStyle: `per SOUL.md`
 - notes:
   - Primary user
   - Krusty Krab owner

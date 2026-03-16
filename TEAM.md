@@ -19,16 +19,6 @@ Use this file for a quick overview; use `multi-agent.md` for full operating poli
 
 ---
 
-## Standard flow (short)
-1) Boss asks `main`
-2) `main` writes TASK_BRIEF + SUCCESS
-3) `main` assigns to sandy/glados
-4) worker produces artifacts
-5) `squid` reviews with QC verdict
-6) `main` delivers final to Boss
-
----
-
 ## Trigger
 - `@team` → start team-mode orchestration for the current task.
 - Proactive delegation is allowed when `main` judges a task as too complex/time-consuming/risky for single-agent execution.

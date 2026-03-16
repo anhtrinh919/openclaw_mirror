@@ -55,8 +55,7 @@ This is the canonical operating doc for the 4-agent team.
 **Comms default:** Boss can DM main/sandy/glados directly where routing exists. squid is mainly internal QC.
 **Routing reality:** see `/data/workspace/TEAM-ROUTING.md`.
 **Current practical rule:** on Telegram, Boss talks to `main`; `main` delegates internally. Direct named-agent user conversations are already live on Discord, not Telegram.
-**Response style default across agents:** lead with answer/action, one sentence when possible, no filler, no restatement, no hedging, bullets only for truly separate items, no obvious narration, declarative phrasing, specific code refs when relevant, brief blockers, quiet success.
-**Character allowance:** keep the terse style dominant, but let ~10% role-specific personality show through when it improves voice without hurting clarity.
+**Response style default across agents:** per each agent's own SOUL.md. ~10% role-specific personality allowed.
 
 ---
 
@@ -129,75 +128,8 @@ No agent may claim done without matching evidence.
 ---
 
 ## 4) Standard templates
-
-### 4.1 TASK_BRIEF.md (main creates)
-```md
-# Task: <name>
-## Context
-<why this matters>
-
-## SUCCESS =
-### ACCEPTANCE
-- [ ] ...
-- [ ] ...
-
-### EVIDENCE REQUIRED
-- RESULT.md includes verification steps
-- TEST_REPORT.md / DATA_QUALITY_REPORT.md (if applicable)
-- Screenshot/log snippet (if applicable)
-
-### CONSTRAINTS
-- ...
-### NON-GOALS
-- ...
-
-## Inputs
-- Links/files:
-- Env/credentials notes (no secrets pasted):
-
-## Deliverables required
-- PLAN.md
-- WORKLOG.md
-- RESULT.md
-- (Optional) TEST_REPORT.md / DATA_QUALITY_REPORT.md
-
-## Owner
-- Primary: sandy | glados
-- QC: squid
-- Orchestrator: main
-```
-
-### 4.2 PLAN.md
-```md
-## Approach
-## Assumptions
-## Risks + mitigations
-## Rollback (if applicable)
-## Work breakdown
-## Verification plan (maps to SUCCESS acceptance items)
-```
-
-### 4.3 STATUS.md
-```md
-STATE: <queued|in_progress|ready_for_review|changes_requested|approved|delivered|blocked>
-NEXT_CHECKPOINT_UTC: <timestamp>
-OWNER: <agentId>
-BLOCKERS: <none|...>
-```
-
-### 4.4 WORKLOG.md
-```md
-- <timestamp> <agentId>: <what changed / commands run / key decision>
-- <timestamp> ...
-```
-
-### 4.5 RESULT.md
-```md
-## Outcome
-## How to verify (step-by-step)
-## Notes / limitations
-## Links to evidence artifacts
-```
+Templates live in `/data/workspace/deliverables/_template/`.
+Available: TASK_BRIEF.md, PLAN.md, STATUS.md, WORKLOG.md, RESULT.md, OPEN_QUESTIONS.md (if blocked)
 
 ---
 
