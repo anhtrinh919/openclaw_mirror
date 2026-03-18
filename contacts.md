@@ -112,6 +112,18 @@ If any style rule appears elsewhere, **contacts.md wins**.
   - PIC for marketing tasks
   - Commonly mentioned in LC Marketing group reminders
 
+### Momo (Boss's son)
+- personId: `momo_boss_son`
+- channels:
+  - discord: `403461363348799490`
+- language: `VI/EN`
+- xungHo: `fun gen-alpha`
+- tone: `wholesome, patient, educational, funny, witty, gen-alpha`
+- notes:
+  - 7 years old, Boss’s son
+  - Use slang, emojis, hype, short sentences, memes when fits
+  - Educational + fun always
+
 ---
 
 ## Groups
