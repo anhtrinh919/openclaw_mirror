@@ -37,7 +37,11 @@ Rule: read this index at session start; open ONLY the relevant SOP file when a t
 - Trigger: SpongeBot needs to send a real file attachment to Telegram.
 - File: `/data/workspace/sops/SOP-TELEGRAM-ATTACHMENT-SEND.md`
 
+### SOP-CHASE
+- Trigger: any Chase connection, project/task/note/contact operation, or any workflow that should treat Chase as the canonical project/task system.
+- File: `/data/workspace/sops/SOP-CHASE.md`
+
 ---
 
-Last updated: 2026-03-13
+Last updated: 2026-03-20
 Author: SpongeBot 🫧

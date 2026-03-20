@@ -82,7 +82,7 @@ Recommended probes:
 
 ### Gmail
 ```bash
-GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog gmail search "is:unread" --account tuananhtrinh919@gmail.com --max 1 --json --no-input
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog gmail search \"is:unread\" --account tuananhtrinh919@gmail.com --max 1 --json --no-input
 ```
 
 ### Calendar
@@ -92,7 +92,7 @@ GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog cal
 
 ### Sheets
 ```bash
-GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog sheets get 1-O_B27mSDqfEZemD27bPNmWtfnV3cW51LeClBmSwB6c "Sheet1!A1:Z3" --account tuananhtrinh919@gmail.com --json --no-input
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog sheets get 1-O_B27mSDqfEZemD27bPNmWtfnV3cW51LeClBmSwB6c \"Sheet1!A1:Z3\" --account tuananhtrinh919@gmail.com --json --no-input
 ```
 
 ### Tasks
@@ -102,107 +102,55 @@ GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog tas
 
 ---
 
-## Step 2 — Full Re-Auth (when token is revoked / invalid_grant)
+## Step 2 — Full Re-Auth (agent-driven)
 
-Use this when:
-- API calls return `invalid_grant`
-- token is expired/revoked
-- required scopes are missing
-- backup token was stale or downgraded
+**Agents only:** On `invalid_grant`/expired token:
 
-### Start a live manual auth session
+1. `exec(pty=true)`: `GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog auth add tuananhtrinh919@gmail.com --manual --services gmail,calendar,drive,sheets,tasks,contacts,docs,slides,people,forms,appscript --force-consent --timeout 15m`
 
-```bash
-GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog auth add tuananhtrinh919@gmail.com \
-  --manual \
-  --services gmail,calendar,drive,sheets,tasks,contacts,docs,slides,people,forms,appscript \
-  --force-consent \
-  --timeout 15m
-```
+2. `process.log` → extract/print auth URL to user.
 
-Important:
-- keep the auth process/session alive while the user approves
-- user opens the Google URL
-- user pastes back the final `http://127.0.0.1:...` redirect URL
-- feed that redirect URL back into the waiting `gog` process
+3. Message user: Open URL, authorize, paste full redirect `http://127.0.0.1:...` back.
 
-On success, `gog auth list --json --no-input` should show the expanded service set.
+4. On paste: `process.write(full-redirect-url)` to session.
+
+5. `process.poll/log` until `gog auth list` shows full services.
+
+Success: `email tuananhtrinh919@gmail.com services appscript,calendar,...`
 
 ---
 
 ## Step 3 — Export Fresh Backup Immediately
 
-After successful re-auth, **always** refresh the persistent backup token file.
+After re-auth:
 
 ```bash
-GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog auth tokens export tuananhtrinh919@gmail.com --out /tmp/gog_auth_backup_fresh.json --force --no-input && \
-cp /tmp/gog_auth_backup_fresh.json /data/workspace/gog_auth_backup.json
+rm -f /data/workspace/gog_auth_backup.json && \
+GOG_KEYRING_PASSWORD=openclaw_secure_2026 /home/linuxbrew/.linuxbrew/bin/gog auth tokens export tuananhtrinh919@gmail.com --out /data/workspace/gog_auth_backup.json --force --no-input
 ```
 
-Reason:
-- cron restore depends on `/data/workspace/gog_auth_backup.json`
-- if this file is stale, future runs can re-break even after a successful manual re-auth
+(Uses `rm` to overwrite; verifies `exported true`.)
 
 ---
 
 ## Step 4 — Verify Cemented Fix
 
-After export, confirm all of these:
-
-1. `gog auth list --json --no-input` shows the expected service set
-2. `/data/workspace/gog_auth_backup.json` contains the expected expanded `services` / `scopes`
-3. live Gmail probe passes
-4. live Calendar probe passes
-5. live Sheets probe passes
-6. live Tasks probe passes
-
-If all six pass, the fix is considered real.
+Confirm:
+1. `gog auth list --json --no-input` → full services.
+2. `/data/workspace/gog_auth_backup.json` → fresh scopes.
+3. Gmail/Calendar/Sheets/Tasks probes pass.
 
 ---
 
 ## Failure Modes
 
-### `invalid_grant`
-Meaning:
-- refresh token expired or revoked
+- `invalid_grant` → Steps 2-3.
+- Cron fails post-auth → Step 3 missing.
+- Narrow scopes → Step 2 full bundle.
 
-Action:
-- do **Step 2** full re-auth
-- then do **Step 3** export fresh backup
+## Operational Rule
 
-### Auth looks fine in one session, but cron still fails later
-Meaning:
-- backup file was not refreshed
-- cron imported stale token from `/data/workspace/gog_auth_backup.json`
+Cron/SOPs: \"Read SOP-GOG-AUTH.md; Step 0 then probes.\"
 
-Action:
-- do **Step 3** immediately after re-auth
-
-### Missing service scopes
-Meaning:
-- auth exists, but token was created with too narrow a service set
-
-Action:
-- full re-auth with the canonical service bundle from this SOP
-
-### `requested scopes invalid`
-Meaning:
-- auth request included unsupported scopes/services for this client/runtime
-
-Action:
-- use the canonical service bundle from this SOP, not ad-hoc “everything” scope requests
-
----
-
-## Operational Rule for Other SOPs / Cron Jobs
-
-Allowed pattern:
-- “Read `/data/workspace/sops/SOP-GOG-AUTH.md` and follow Step 0 before using `gog`.”
-
-Avoid pattern:
-- embedding raw restore commands directly in every SOP or cron prompt
-
----
-
-**Cập nhật:** 2026-03-13
+**Cập nhật:** 2026-03-20 (agent-driven re-auth)
 **Tác giả:** SpongeBot 🫧
