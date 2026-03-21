@@ -1,165 +1,256 @@
 # SOP-TASKS — Task Creation (@task)
 
-(Extracted from legacy `/data/workspace/SOP.md`. One SOP per file.)
+Use this SOP whenever Boss sends `@task ...`.
+
+Chase is now the **canonical PM system** for `@task`.
 
 ---
 
-# SOP 4: Task Creation - @Task Trigger
+## Purpose
 
-## Tổng Quan
-Quy trình xử lý `@task` trigger từ bất kỳ chat/group Telegram nào → Tạo task trong `task.md` theo bucket → (tuỳ chọn) tạo Google Tasks item cho Boss → Tạo reminder cron gửi Telegram lúc 12pm deadline đến chat gốc.
-
-**Trigger patterns (bất kỳ chat Telegram):** 
-- `@task [description] [PIC] [deadline]` (hoặc tương tự, parse tự động).
-- Hoạt động ở DM/group (capture chat_id từ metadata).
-
-**Required:** Description (nhiệm vụ), PIC (Person In Charge, e.g., "Trâm Anh" hoặc ID 6402311566), Deadline (dd/mm/yyyy hoặc relative như "tomorrow").
-
-**Language:** English/Tiếng Việt based on user; keep consistent.
-
-**Tracking file:** `/data/workspace/task.md` (buckets + log table).
-
-**Integrations (current):**
-- Canonical tracker Sheet (bot-managed): `/data/workspace/task_system.json` → `task_tracker_sheet`
-- Boss on-demand view: Google Tasks list (Boss manages completion): `/data/workspace/task_system.json` → `google_tasks`
-
-**Completion rule:** Boss marks tasks **done** in Google Tasks → bot syncs status back to Sheet **1x/day**.
+This SOP standardizes:
+1. how `@task` is parsed
+2. how tasks are created in Chase
+3. how project assignment is chosen automatically
+4. how notes, due dates, and Chase contacts are attached
+5. when reminders are created
+6. what to do if Chase MCP is unavailable
 
 ---
 
-## Luồng Chính
-```
-User: @task [description] [PIC] [deadline]
+## Canonical Rule
+
+**For `@task`, Chase is the source of truth.**
+
+Do not use Google Tasks or Google Sheets as the canonical tracker.
+Do not treat `/data/workspace/task.md` as canonical.
+Use local files only as fallback if Chase is down.
+
+Chase connection facts:
+- MCP endpoint: `https://life-tracker-production-17cb.up.railway.app/api/mcp`
+- API key file: `/data/workspace/.chase_api_key`
+- Connection/permission policy: `/data/workspace/sops/SOP-CHASE.md`
+
+---
+
+## Trigger
+
+**Pattern:** `@task [freeform task instruction]`
+
+Examples:
+- `@task send final OpenSea backlog to team - me - tomorrow 5pm`
+- `@task follow up LanChi on PNL report - chị Chi - Monday`
+- `@task create launch checklist for Opensea`
+
+Default behavior:
+- parse title
+- infer or ask for project
+- infer or ask for due date when needed
+- infer or ask for contact when useful
+- add notes if the message contains execution detail/context
+- create the Chase task
+- optionally create a reminder cron when the task has a due date
+
+---
+
+## Required / Optional Fields
+
+### Required
+- task title / actionable description
+
+### Strongly preferred
+- due date when timing matters
+- contact when the task is about chasing/following up with someone
+
+### Optional
+- project
+- notes/context
+- priority
+
+If essential fields are missing and the task cannot be created cleanly, ask once.
+
+---
+
+## Main Flow
+
+```text
+User: @task [instruction]
     ↓
-Bot: Parse/ask missing info → Smart bucket sort
+Bot: Parse title, due date, contact, project, notes, priority
     ↓
-Bot: Append task to task.md + log table
+Bot: Resolve Chase project smartly
     ↓
-Bot: (If PIC=Boss and Google Tasks enabled) create Google Tasks item
+Bot: Resolve Chase contact smartly when relevant
     ↓
-Bot: Create reminder cron (12pm deadline, send to original chat_id)
+Bot: Create task in Chase with notes + due date + contact_id
     ↓
-Bot: Reply "✅ Task created in [bucket]. Reminder set."
+Bot: If due date exists, optionally create reminder cron to original chat
+    ↓
+Bot: Reply with created task summary
 ```
 
 ---
 
-## Chi Tiết Các Bước
+## Parsing Rules
 
-### Bước 1: Trigger Detection & Parsing
-- **Patterns:** `@task` + text (parse description, PIC, deadline using keywords/natural lang).
-- **Missing info:** Reply hỏi (e.g., "Cần PIC và deadline cho '[description]'!") → Wait user reply → Retry parse.
-- **Deadline parse:** dd/mm/yyyy → Convert to ISO (YYYY-MM-DD). Relative (e.g., "3 days") → Add to today (Vietnam TZ).
-- **PIC lookup:** Cross-check `contacts.md` for names/IDs; fallback to raw text.
-- **Origin:** Store chat_id (e.g., "telegram:171900099" or group ID like "-5194157539").
+From the user message, extract when possible:
+- **title** → short action phrase
+- **due_date** → ISO date if explicit or inferable
+- **contact** → the person to chase / follow up with
+- **project** → explicit project name/ID, or inferred project
+- **notes** → extra context that should live in the task
+- **priority** → `critical` only when urgency is explicit; else `normal`
 
-### Bước 2: Smart Bucket Sorting
-Logic tự động dựa trên description/PIC/keywords (priority order):
-- **Personal:** PIC = "Boss", "Tuan Anh", "me" (nếu user=Boss) hoặc keywords: "personal", "errand", "reminder".
-- **Staff:** PIC match contacts.md (e.g., "Trâm Anh" → 6402311566, "Chi Phan" → 82510296).
-- **Critical:** Keywords: "urgent", "ASAP", "deadline", "critical", "fire", "emergency" HOẶC deadline < 3 ngày.
-- **Other:** Default nếu không match trên.
+### Due date handling
+- Always interpret human dates in **Asia/Ho_Chi_Minh** unless Boss says otherwise.
+- Store due date in Chase as `YYYY-MM-DD`.
+- If user gives a time, preserve the time in task notes because Chase task schema uses `due_date` only.
 
-### Bước 3: Append to task.md
-- **Bucket sections:** Append bullet dưới bucket đúng:
-  ```
-  ### Personal
-  - **TASK-20260228-01** | [Description] | PIC: Tuan Anh | Deadline: 2026-03-01 | Chat: telegram:171900099 | Reminder: cron-abc123 ✅
-  ```
-- **Log table:** Add row cuối bảng:
-  | ID | Created | Description | PIC | Deadline | Bucket | Origin Chat | Reminder Set | Status |
-  |----|---------|-------------|-----|----------|--------|-------------|--------------|--------|
-  | TASK-20260228-01 | 2026-02-28T10:00:00Z | Review report | Trâm Anh | 2026-03-01 | staff | telegram:-5194157539 | ✅ cron-abc123 | pending |
-
-- Update footer: **Last updated: YYYY-MM-DD by SpongeBot 🫧**
-
-### Bước 3.5 (Optional): Create Google Tasks item for Boss
-Only when:
-- PIC is Boss ("Tuan Anh"/"me"), AND
-- `/data/workspace/task_system.json` has `google_tasks.enabled=true` and a `tasklistId`.
-
-Action:
-- `gog tasks add <tasklistId> --title "[TASK-ID] — [description]" --due [YYYY-MM-DD] --notes "Canonical tracker: [sheet url]"`
-Notes:
-- Google Tasks due time may be ignored; include time in title/notes if needed (e.g., "(Wed 08:00 VN)").
-
-### Bước 4: Create Reminder Cron
-**Canonical Telegram send path for reminders:**
-- Use `/data/workspace/ops/send_telegram_verified.sh`
-- Never use `message(...)` inside the cron payload for Telegram reminders
-- Success proof must come from the verified sender script (`ok=true`, expected `chatId`, real `messageId`)
-- For heartbeat-based failure alerts on these scheduled sends, monitor `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`
-
-**Cron tool call (EXACT):**
-```json
-{
-  "action": "add",
-  "job": {
-    "name": "task-reminder-TASK-YYYYMMDDNN",
-    "schedule": { "kind": "at", "at": "[YYYY-MM-DD 12:00:00 Asia/Ho_Chi_Minh]" },
-    "sessionTarget": "isolated",
-    "payload": {
-      "kind": "agentTurn",
-      "message": "Use exec to run this exact command and do not use message(...): /data/workspace/ops/send_telegram_verified.sh [chat_id] '🔥 Reminder: [Description] (PIC: [PIC], Deadline: [Date])' . If the command exits 0, reply NO_REPLY. If it fails, return the command error briefly.",
-      "model": "openrouter/anthropic/claude-sonnet-4.6",
-      "thinking": "low",
-      "timeoutSeconds": 30
-    },
-    "delivery": { "mode": "none" },
-    "enabled": true
-  }
-}
-```
-- Capture cron ID từ response, update task.md (Reminder Set column).
-- Timeout: 30s (simple send).
-- TZ: ALWAYS Asia/Ho_Chi_Minh.
-
-### Bước 5: Reply to User
-```
-✅ Task "[description]" created in "[bucket]" bucket (PIC: [PIC], Deadline: [date]).
-Details logged in task.md.
-Reminder set for 12pm [deadline date] in this chat/group.
-```
-- Nếu group: Mention user nếu có.
+### Notes handling
+Put useful execution context into `notes`, such as:
+- constraints
+- success criteria
+- links or references the user included
+- follow-up details
+- explicit time context like `5pm VN`
 
 ---
 
-## Daily Sync: Google Tasks → Sheet
-Boss wants: when he marks done in Google Tasks, bot updates Sheet automatically.
+## Smart Project Assignment
 
-Implementation:
-- Cron job runs **1x/day** (current: 18:00 Asia/Ho_Chi_Minh).
-- It must read and follow `/data/workspace/sops/SOP-GOG-AUTH.md` before any `gog` call.
-  - Use **Step 0** for restore.
-  - Do not duplicate raw restore commands in the cron prompt.
-- It reads `/data/workspace/task_system.json` for `tasklistId` + `spreadsheetId`.
-- It fetches Google Tasks **including completed** + **all pages**:
-  - `gog tasks list <tasklistId> --all --show-hidden --show-completed ...`
-- It maps tasks by title prefix `TASK-YYYYMMDD-NN` and updates Sheet column **E (Status)**.
+When Boss provides a Chase project unique ID, use it directly.
 
----
+Otherwise resolve project in this order:
 
-## Quy Tắc Xử Lý Lỗi
-- **Parse fail:** Ask once, then fallback to "other" bucket.
-- **task.md write fail:** Fixed ✅ (retry write); if permanent ❌, alert Boss.
-- **Cron fail:** Retry once; if fail, "❌ Manual reminder needed—logged in task.md".
-- **Google Tasks fail:** Log in task.md Notes; proceed without blocking.
-- **Cross-chat:** Reminders only Telegram (if origin non-Telegram, send to Boss DM 171900099).
-- **Scheduled Telegram send failures:** let heartbeat surface only **new** failures via `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`.
+### 1) Exact explicit project match
+If Boss names a known Chase project clearly, use that project.
 
----
+### 2) Strong keyword/domain match
+Infer by context. Examples:
+- `OpenSea`, `Opensea`, startup build work → `OpenSea`
+- Lanchi / LanChi work → `LanChi`
+- family/personal/home tasks → `Family`
+- Chase product work → `Chase`
+- OpenClaw / bot / agent infra work → `openclaw`
 
-## File Liên Quan
-- **Master list:** `/data/workspace/task.md`
-- **System config:** `/data/workspace/task_system.json`
-- **Canonical sheet:** see `/data/workspace/task_system.json` → `task_tracker_sheet`
-- **Cron sync job:** `tasks-sync-google-tasks-to-sheet-daily`
-- **Google auth SOP:** `/data/workspace/sops/SOP-GOG-AUTH.md`
-- **Verified Telegram sender:** `/data/workspace/ops/send_telegram_verified.sh`
-- **Telegram send failure heartbeat monitor:** `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`
-- **Contacts for PIC:** `/data/workspace/contacts.md`
+### 3) Existing project continuity
+If the task is clearly a continuation of recent work already associated with a project, reuse that project.
+
+### 4) Default fallback
+Use the Chase default project only when no better fit exists.
+
+### 5) Ask once when ambiguous
+If 2+ projects are plausible and confidence is low, ask a brief clarifying question instead of guessing.
 
 ---
 
-**Cập nhật:** 2026-03-14  
+## Smart Contact Assignment
+
+When the task is clearly about chasing, waiting on, following up with, or coordinating with a person:
+- resolve that person against Chase contacts first
+- attach `contact_id` when a confident match exists
+
+Use contacts for examples like:
+- `follow up with ...`
+- `chase ...`
+- `ask ...`
+- `wait for ...`
+- `remind ...`
+
+If no Chase contact matches confidently:
+- create the task without contact_id
+- include the human name in notes
+- do **not** mutate contacts without approval (see `SOP-CHASE`)
+
+---
+
+## Task Creation Rule
+
+Create the Chase task with these defaults unless the user says otherwise:
+- `status`: `backlog`
+- `priority`: `normal` unless explicit urgency → `critical`
+- `project_id`: resolved via Smart Project Assignment
+- `notes`: concise but useful context
+- `due_date`: if available
+- `contact_id`: if confidently matched and relevant
+
+When the task already exists and the user is clearly updating it, prefer updating the existing Chase task instead of creating a duplicate.
+
+---
+
+## Reminder Rule
+
+If the task has a due date, create a reminder cron unless Boss clearly does not want reminders.
+
+Default reminder behavior:
+- send reminder to the original chat
+- send at **12:00 Asia/Ho_Chi_Minh on the due date**
+- if original surface is not Telegram, send to Boss Telegram DM `171900099`
+
+For Telegram scheduled sends:
+- use `/data/workspace/ops/send_telegram_verified.sh`
+- do not rely on internal chat echoes as proof of delivery
+
+Reminder message shape:
+- `🔥 Chase reminder: [task title] — due today` 
+- include project name, contact name, and time note when helpful
+
+---
+
+## Reply Format
+
+Keep it short.
+
+Example:
+- `✅ Added to Chase: [title] — project: [project], due: [date], contact: [name/no contact]. Reminder set.`
+
+If reminder not set:
+- say so briefly
+
+If project/contact was inferred:
+- mention the chosen project only, not the whole reasoning
+
+---
+
+## Error Handling
+
+### If Chase MCP is unavailable
+1. say Chase is temporarily unavailable
+2. do not pretend task creation succeeded
+3. if needed, save a temporary local fallback note in `/data/workspace/task.md`
+4. sync the task into Chase once access is restored
+
+### If project resolution is ambiguous
+- ask once
+
+### If contact resolution is ambiguous
+- create without contact_id unless the contact is critical to the task meaning
+
+### If reminder creation fails
+- task creation in Chase still stands
+- tell Boss reminder was not set
+
+---
+
+## Heartbeat / Follow-up Monitoring
+
+Chase heartbeat is handled separately from task creation.
+
+Current rule:
+- 4x/day, a scheduled Chase heartbeat checks pending tasks and chase/follow-up items
+- it notifies Boss with pending work summary
+- it alerts Boss if Chase MCP connectivity fails
+
+---
+
+## Files / Systems
+
+- **Connection + permission policy:** `/data/workspace/sops/SOP-CHASE.md`
+- **API key:** `/data/workspace/.chase_api_key`
+- **Telegram verified sender:** `/data/workspace/ops/send_telegram_verified.sh`
+- **Fallback scratch file only:** `/data/workspace/task.md`
+
+---
+
+**Cập nhật:** 2026-03-21  
 **Tác giả:** SpongeBot 🫧

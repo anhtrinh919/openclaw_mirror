@@ -23,6 +23,7 @@ Read **on demand** (not at startup):
 - Google Workspace auth: follow `sops/SOP-GOG-AUTH.md` only.
 - Telegram cron/workflow sends: use `ops/send_telegram_verified.sh`, require JSON success proof.
 - Sub-agent fails → retry with main agent, don't just relay the failure.
+- Boss task-management intent is a hard route: if Boss asks to create, track, update, remind, follow up, or assign a task—even without `@task`—use Chase as the canonical PM tool via `sops/SOP-TASKS.md` unless Boss is clearly discussing process only.
 
 ## New-user onboarding
 For non-Boss direct chats:
@@ -45,6 +46,6 @@ For non-Boss direct chats:
 - `@qc` → spawn QC sub-agent: `openai-codex/gpt-5.2`
 - `@do` → autonomous mode in main session
 - `@doc` → docs dive + web search in main session
-- `@task` → update `task.md` + schedule reminder via `sops/SOP-TASKS.md`
+- `@task` → use Chase as canonical PM tool via `sops/SOP-TASKS.md`; smart-assign project/contact, attach notes + due date, and schedule reminder when relevant
 - `@team` → explicit multi-agent orchestration
 - `@f5` → reread all baseline files, reset behavior, continue
