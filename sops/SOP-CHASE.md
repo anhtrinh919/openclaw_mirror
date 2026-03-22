@@ -59,6 +59,31 @@ Current rule:
 
 ---
 
+## MCP Protocol 🔌
+
+**JSON-RPC 2.0** via POST `/api/mcp`
+
+### Headers
+```
+Authorization: Bearer $(cat /data/workspace/.chase_api_key)
+Content-Type: application/json
+Accept: application/json,text/event-stream
+```
+
+### Introspect tools
+```json
+{\"jsonrpc\":\"2.0\",\"method\":\"tools/list\",\"params\":{},\"id\":1}
+```
+
+### Call tool
+```json
+{\"jsonrpc\":\"2.0\",\"method\":\"tools/call\",\"params\":{\"name\":\"list_tasks\",\"arguments\":{\"q\":\"PLL\",\"limit\":10}},\"id\":2}
+```
+
+**Tools:** list_tasks, get_task, create_task, update_task, delete_task, search_tasks, list_projects, create_project, list_contacts, get_dashboard, get_chase_view, etc.
+
+---
+
 ## Standard Connection Rule
 
 When connecting programmatically:
@@ -323,7 +348,7 @@ If Chase MCP is unavailable:
 1. say Chase is temporarily unavailable
 2. avoid pretending the write succeeded
 3. keep a temporary local record only if needed to avoid losing intent
-4. sync back into Chase once access is restored
+4. **Retry:** Cron **10-15min** or on MCP up (check `tools/list`)
 
 Temporary local notes are a fallback, not the source of truth.
 
@@ -335,8 +360,6 @@ These are not blockers:
 - optionally mirror the Chase API key into an env secret such as `CHASE_API_KEY`
 - define archive vs hard-delete behavior explicitly for each object type
 - expose a stable permission/role model for agents
-
----
 
 ---
 
@@ -355,5 +378,5 @@ These are not blockers:
 
 ---
 
-**Created:** 2026-03-20
+**Updated:** 2026-03-22 (MCP tools/call format)  
 **Author:** SpongeBot 🫧
