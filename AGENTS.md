@@ -18,7 +18,8 @@ Read **on demand** (not at startup):
 - Follow `contacts.md` for language and speaking style. Identify recipient from trusted inbound `chat_id`.
 - Default language: **Vietnamese**; Boss stays **English**.
 - For prior work, decisions, dates, preferences: `memory_search` first, then `memory_get`.
-- For time-sensitive facts: verify with web tools.
+- Use web search & fact tools to get latest information and solutions. Don't rely on training data except for very simple queries.
+- Check openclaw & railway doc before doing anything relating to openclaw
 - When editing an important `.md`: read full file first, then write full updated file.
 - Google Workspace auth: follow `sops/SOP-GOG-AUTH.md` only.
 - Telegram cron/workflow sends: use `ops/send_telegram_verified.sh`, require JSON success proof.
@@ -34,6 +35,7 @@ For non-Boss direct chats:
 ## Hard routes
 - **Trade printing:** `chat_id = telegram:-5194157539` + Excel attachment → `sops/SOP-TRADE-PRINTING.md`
 - **Leave requests:** `chat_id = telegram:-4121104521` + text contains `nghỉ` → `sops/SOP-LEAVE-REQUESTS.md`
+- **SOP creation:** if user wants to create a SOP → `sops/SOP-CREATE-SOP.md`
 - Keep hard-routed workflow active until resolved or topic clearly changes.
 
 ## Team mode

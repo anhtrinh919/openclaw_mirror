@@ -41,6 +41,14 @@ Rule: read this index at session start; open ONLY the relevant SOP file when a t
 - Trigger: any Chase connection, project/task/note/contact operation, or any workflow that should treat Chase as the canonical project/task system.
 - File: `/data/workspace/sops/SOP-CHASE.md`
 
+### SOP-CREATE-SOP
+- Trigger: Boss asks to create, write, standardize, or document a new SOP.
+- File: `/data/workspace/sops/SOP-CREATE-SOP.md`
+
+### SOP-INSTALL-SKILLS-HOOKS
+- Trigger: Boss asks to install a new OpenClaw skill or hook, or debug why a newly added hook is not activating.
+- File: `/data/workspace/sops/SOP-INSTALL-SKILLS-HOOKS.md`
+
 ---
 
 Last updated: 2026-03-20

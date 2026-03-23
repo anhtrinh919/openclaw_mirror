@@ -40,6 +40,8 @@ scratch/
 # Known sensitive files in this workspace
 .dust_api_key
 .gemini_api_key
+.chase_api_key
+.config/
 gog_client_secret.json
 gog_auth_backup.json
 dust_profile.json
