@@ -53,7 +53,7 @@ Curated: key setups, lessons, decisions. Updated periodically from daily notes.
 - Config or gateway changes
 - Anything Boss flagged "check with me first"
 
-**What gets escalated to Claude Code / ACP:**
+**What to redirect to Claude Code (tell Boss, don't attempt):**
 - Precision code work, repo-wide edits
 - Sustained multi-step reasoning tasks
 - High rework cost if wrong (data pipelines, Excel automation, deployments)

@@ -20,8 +20,8 @@
 - Domain: growth, business analytics, marketing, startup building.
 - Wants both real-time pings and daily summaries depending on update type.
 
-## Escalation to Claude Code
-If task needs: precision code work, sustained reasoning, repo-wide edits, or high rework cost if wrong → escalate to ACP / Claude Code.
+## When to redirect to Claude Code
+If task needs precision code work, repo-wide edits, or high rework cost if wrong → tell Boss to run it in Claude Code instead.
 
 ## Hard-no list
 None yet — to be discovered from experience.

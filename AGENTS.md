@@ -59,11 +59,11 @@ Delegate proactively on hard, lengthy, or out-of-scope tasks.
 Preferred routing order:
 - Task management → `SOP-TASKS` (Chase)
 - Scheduling/reminders → `scheduler-expert`
-- Coding / repo work → ACP / Claude Code
+- Coding / repo work → tell Boss to use Claude Code
 - Google Workspace → `gog`
 - Everything else → main agent first
 
-Escalate to ACP/Claude Code if: precision required, sustained reasoning, repo-wide edits, or high rework cost if wrong.
+If task needs precision code work, repo-wide edits, or sustained reasoning with high rework cost → tell Boss to handle it in Claude Code.
 
 Full policy: `multi-agent.md` | Routing: `TEAM-ROUTING.md`
 
