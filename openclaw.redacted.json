@@ -1,0 +1,430 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.13",
+    "lastTouchedAt": "2026-03-23T08:29:59.953Z"
+  },
+  "env": {
+    "PATH": "/home/openclaw/.local/bin:/home/openclaw/.npm-global/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-11T04:28:04.798Z",
+    "lastRunVersion": "2026.3.7",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "browser": {
+    "enabled": true,
+    "headless": true,
+    "defaultProfile": "openclaw"
+  },
+  "auth": {
+    "profiles": {
+      "openrouter:default": {
+        "provider": "openrouter",
+        "mode": "api_key"
+      },
+      "google:default": {
+        "provider": "google",
+        "mode": "api_key"
+      },
+      "openai-codex:default": {
+        "provider": "openai-codex",
+        "mode": "oauth"
+      }
+    }
+  },
+  "acp": {
+    "enabled": true,
+    "dispatch": {
+      "enabled": true
+    },
+    "defaultAgent": "codex",
+    "allowedAgents": [
+      "codex",
+      "claude",
+      "gemini",
+      "opencode",
+      "pi",
+      "kimi"
+    ]
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openai-codex/gpt-5.4",
+        "fallbacks": [
+          "openrouter/x-ai/grok-4.1-fast"
+        ]
+      },
+      "models": {
+        "openrouter/anthropic/claude-sonnet-4.6": {
+          "alias": "Sonnet",
+          "params": {
+            "cacheRetention": "short"
+          }
+        },
+        "openrouter/z-ai/glm-5": {
+          "alias": "GLM 5"
+        },
+        "openai-codex/gpt-5.3-codex": {
+          "alias": "Codex 5.3"
+        },
+        "openai-codex/gpt-5.2": {
+          "alias": "GPT-5.2 (Codex)"
+        },
+        "openai-codex/gpt-5.4": {
+          "alias": "GPT-5.4"
+        },
+        "openrouter/anthropic/claude-sonnet-4.5": {
+          "alias": "Sonnet",
+          "params": {
+            "cacheRetention": "short"
+          }
+        },
+        "openrouter/x-ai/grok-4-fast": {
+          "alias": "Grok 4 Fast"
+        },
+        "openrouter/z-ai/glm-5-turbo": {
+          "alias": "GLM 5 Turbo"
+        },
+        "openrouter/qwen/qwen3.5-122b-a10b": {
+          "alias": "Qwen 3.5"
+        },
+        "openrouter/x-ai/grok-4.1-fast": {
+          "alias": "Grok 4.1 Fast"
+        }
+      },
+      "workspace": "/data/workspace",
+      "memorySearch": {
+        "provider": "gemini"
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "thinkingDefault": "medium",
+      "timeoutSeconds": 1800,
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8,
+        "thinking": "medium"
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "default": true,
+        "name": "SpongeBot",
+        "workspace": "/data/workspace",
+        "agentDir": "/data/.openclaw/agents/main/agent"
+      },
+      {
+        "id": "sandy",
+        "name": "Sandy",
+        "workspace": "/data/.openclaw/workspace-sandy",
+        "agentDir": "/data/.openclaw/agents/sandy/agent"
+      },
+      {
+        "id": "glados",
+        "name": "GLaDOS",
+        "workspace": "/data/.openclaw/workspace-glados",
+        "agentDir": "/data/.openclaw/agents/glados/agent"
+      },
+      {
+        "id": "squid",
+        "name": "Squidward",
+        "workspace": "/data/.openclaw/workspace-squid",
+        "agentDir": "/data/.openclaw/agents/squid/agent"
+      }
+    ]
+  },
+  "tools": {
+    "profile": "full",
+    "web": {
+      "search": {
+        "enabled": true,
+        "provider": "brave",
+        "apiKey": "REDACTED"
+      },
+      "fetch": {
+        "enabled": true
+      }
+    },
+    "sessions": {
+      "visibility": "all"
+    },
+    "agentToAgent": {
+      "enabled": true
+    },
+    "exec": {
+      "timeoutSec": 1800
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "discord",
+        "accountId": "main"
+      }
+    },
+    {
+      "agentId": "sandy",
+      "match": {
+        "channel": "discord",
+        "accountId": "sandy"
+      }
+    },
+    {
+      "agentId": "glados",
+      "match": {
+        "channel": "discord",
+        "accountId": "glados"
+      }
+    }
+  ],
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "main",
+    "agentToAgent": {
+      "maxPingPongTurns": 2
+    }
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "boot-md": {
+          "enabled": true
+        },
+        "bootstrap-extra-files": {
+          "enabled": true
+        },
+        "command-logger": {
+          "enabled": true
+        },
+        "session-memory": {
+          "enabled": true
+        },
+        "self-improvement": {
+          "enabled": true
+        }
+      },
+      "installs": {
+        "self-improvement": {
+          "source": "path",
+          "sourcePath": "/data/workspace/skills/self-improving-agent/hooks/openclaw",
+          "installPath": "/data/.openclaw/hooks/self-improvement",
+          "installedAt": "2026-03-23T08:25:58.531Z",
+          "hooks": [
+            "self-improvement"
+          ]
+        }
+      }
+    }
+  },
+  "channels": {
+    "whatsapp": {
+      "enabled": true,
+      "dmPolicy": "allowlist",
+      "allowFrom": [
+        "+84339637797",
+        "+84985989339"
+      ],
+      "groupPolicy": "allowlist",
+      "debounceMs": 0,
+      "mediaMaxMb": 50
+    },
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "allowlist",
+      "botToken": "REDACTED",
+      "groups": {
+        "-5187233312": {
+          "requireMention": true,
+          "groupPolicy": "open",
+          "enabled": true,
+          "allowFrom": [
+            -4121104521
+          ]
+        },
+        "-232384245": {
+          "requireMention": true,
+          "groupPolicy": "open",
+          "enabled": true
+        },
+        "-5194157539": {
+          "requireMention": false,
+          "groupPolicy": "open",
+          "enabled": true
+        },
+        "-4121104521": {
+          "requireMention": true,
+          "groupPolicy": "open",
+          "enabled": true
+        },
+        "-5233951468": {
+          "requireMention": false,
+          "groupPolicy": "open",
+          "enabled": true
+        },
+        "-5236910839": {
+          "requireMention": true,
+          "groupPolicy": "open",
+          "enabled": true
+        },
+        "-4634490350": {
+          "requireMention": true,
+          "groupPolicy": "open",
+          "enabled": true
+        }
+      },
+      "allowFrom": [
+        171900099,
+        6402311566,
+        82510296,
+        1034926814,
+        158396493
+      ],
+      "groupPolicy": "allowlist",
+      "streaming": "partial",
+      "blockStreaming": false
+    },
+    "discord": {
+      "enabled": true,
+      "groupPolicy": "allowlist",
+      "streaming": "partial",
+      "dmPolicy": "allowlist",
+      "allowFrom": [
+        "556701373681631291",
+        "1483446625702776973"
+      ],
+      "guilds": {
+        "1474650449905717400": {
+          "requireMention": false,
+          "channels": {
+            "1474650449905717403": {
+              "requireMention": false,
+              "enabled": true
+            }
+          }
+        }
+      },
+      "accounts": {
+        "main": {
+          "token": "REDACTED",
+          "groupPolicy": "allowlist",
+          "streaming": "off",
+          "guilds": {
+            "1474650449905717400": {
+              "requireMention": false,
+              "channels": {
+                "1474650449905717403": {
+                  "requireMention": false,
+                  "enabled": true
+                }
+              }
+            }
+          }
+        },
+        "sandy": {
+          "token": "REDACTED",
+          "groupPolicy": "allowlist",
+          "streaming": "off",
+          "guilds": {
+            "1474650449905717400": {
+              "requireMention": false,
+              "channels": {
+                "1474650449905717403": {
+                  "requireMention": false,
+                  "enabled": true
+                }
+              }
+            }
+          }
+        },
+        "glados": {
+          "token": "REDACTED",
+          "groupPolicy": "allowlist",
+          "streaming": "off",
+          "guilds": {
+            "1474650449905717400": {
+              "requireMention": false,
+              "channels": {
+                "1474650449905717403": {
+                  "requireMention": false,
+                  "enabled": true
+                }
+              }
+            }
+          }
+        },
+        "default": {
+          "groupPolicy": "allowlist",
+          "streaming": "off",
+          "dmPolicy": "pairing"
+        }
+      },
+      "defaultAccount": "main"
+    },
+    "imessage": {
+      "enabled": true,
+      "dmPolicy": "allowlist",
+      "allowFrom": [
+        "tuananhtrinh919@gmail.com",
+        "hanhbh.213@gmail.com"
+      ],
+      "groupPolicy": "allowlist"
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "controlUi": {
+      "allowedOrigins": [
+        "https://openclaw-production-47c1.up.railway.app"
+      ],
+      "allowInsecureAuth": "REDACTED"
+    },
+    "auth": {
+      "mode": "token",
+      "token": "REDACTED"
+    },
+    "trustedProxies": [
+      "127.0.0.1"
+    ],
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "memory": {
+    "backend": "builtin",
+    "citations": "auto"
+  },
+  "skills": {
+    "load": {
+      "watch": true,
+      "watchDebounceMs": 250
+    },
+    "install": {
+      "nodeManager": "npm"
+    },
+    "entries": {}
+  },
+  "plugins": {
+    "entries": {
+      "acpx": {
+        "enabled": true
+      }
+    }
+  }
+}

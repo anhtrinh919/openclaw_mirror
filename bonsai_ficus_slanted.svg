@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700"
+     style="background: linear-gradient(180deg, #e8f4f8 0%, #c5dfe8 60%, #a8c8a0 100%)">
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#2c5f2e" font-weight="bold">
+    🌿 Ficus Retusa – Dáng Ngang (Slanted/Moyogi)
+  </text>
+  <text x="450" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#5a7a5c" font-style="italic">
+    Thiết kế bởi SpongeBot • Gửi cô Dao Thi Nhan
+  </text>
+
+  <!-- Shadow on ground -->
+  <ellipse cx="410" cy="598" rx="140" ry="18" fill="rgba(0,0,0,0.12)"/>
+
+  <!-- === POT / CHẬU === -->
+  <!-- Pot body -->
+  <rect x="290" y="570" width="240" height="30" rx="4" ry="4"
+        fill="#8B5E3C" stroke="#5c3817" stroke-width="1.5"/>
+  <!-- Pot rim -->
+  <rect x="280" y="562" width="260" height="16" rx="3" ry="3"
+        fill="#A0714F" stroke="#5c3817" stroke-width="1.5"/>
+  <!-- Pot base -->
+  <rect x="300" y="598" width="220" height="10" rx="3" ry="3"
+        fill="#7a4f2a" stroke="#5c3817" stroke-width="1"/>
+  <!-- Pot decoration line -->
+  <line x1="290" y1="578" x2="530" y2="578" stroke="#c49a6c" stroke-width="1" opacity="0.6"/>
+  <!-- Soil -->
+  <ellipse cx="410" cy="563" rx="128" ry="9" fill="#5a3e28" stroke="#3d2a18" stroke-width="1"/>
+  <!-- Moss texture on soil -->
+  <ellipse cx="380" cy="561" rx="30" ry="5" fill="#4a7c3f" opacity="0.7"/>
+  <ellipse cx="430" cy="562" rx="22" ry="4" fill="#5a8c4a" opacity="0.6"/>
+  <ellipse cx="355" cy="563" rx="15" ry="3" fill="#3d6b32" opacity="0.5"/>
+
+  <!-- === NEBARI / ROOT FLARE === -->
+  <!-- Exposed roots -->
+  <path d="M 370,555 Q 340,558 320,565 Q 305,570 295,568" stroke="#7a5c35" stroke-width="5"
+        fill="none" stroke-linecap="round" opacity="0.9"/>
+  <path d="M 375,556 Q 350,562 335,572" stroke="#8a6a42" stroke-width="3.5"
+        fill="none" stroke-linecap="round" opacity="0.8"/>
+  <path d="M 390,556 Q 375,563 365,575" stroke="#7a5c35" stroke-width="3"
+        fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 410,555 Q 440,560 460,568 Q 475,573 490,570" stroke="#7a5c35" stroke-width="4"
+        fill="none" stroke-linecap="round" opacity="0.9"/>
+  <path d="M 405,555 Q 425,562 440,572" stroke="#8a6a42" stroke-width="3"
+        fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- === TRUNK / THÂN CÂY === -->
+  <!-- Main trunk - slanted to the right, base at center-left of pot -->
+  <!-- Trunk goes from nebari area rightward and upward -->
+  <path d="M 380,553 Q 390,520 420,490 Q 455,458 490,430 Q 525,402 555,372 Q 575,348 590,318"
+        stroke="#6B4226" stroke-width="32" fill="none" stroke-linecap="round"/>
+  <!-- Trunk highlight (lighter inner tone) -->
+  <path d="M 382,550 Q 393,517 423,488 Q 458,456 492,428 Q 527,400 557,370 Q 577,346 592,316"
+        stroke="#8B5E3C" stroke-width="18" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <!-- Trunk texture lines -->
+  <path d="M 385,545 Q 395,512 425,482" stroke="#5a3319" stroke-width="2"
+        fill="none" opacity="0.4" stroke-linecap="round"/>
+  <path d="M 392,540 Q 402,507 432,477" stroke="#5a3319" stroke-width="1.5"
+        fill="none" opacity="0.3" stroke-linecap="round"/>
+
+  <!-- Ficus aerial roots (rễ khí sinh) hanging from branches -->
+  <path d="M 510,420 Q 512,460 510,500 Q 509,530 511,555" stroke="#9a7055" stroke-width="2"
+        fill="none" opacity="0.6" stroke-linecap="round"/>
+  <path d="M 530,408 Q 533,450 532,490 Q 531,520 530,548" stroke="#9a7055" stroke-width="1.5"
+        fill="none" opacity="0.5" stroke-linecap="round"/>
+  <path d="M 475,438 Q 474,480 473,515" stroke="#9a7055" stroke-width="1.5"
+        fill="none" opacity="0.4" stroke-linecap="round"/>
+
+  <!-- === PRIMARY BRANCHES / CÀNH SƠ CẤP === -->
+
+  <!-- Branch 1 - First strong branch going left (jin style) - lower left -->
+  <path d="M 425,488 Q 390,470 355,455 Q 320,440 285,432"
+        stroke="#6B4226" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <path d="M 425,488 Q 390,470 355,455 Q 320,440 285,432"
+        stroke="#8B5E3C" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Branch 1 sub-branches -->
+  <path d="M 355,456 Q 335,438 315,418" stroke="#6B4226" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M 320,440 Q 300,422 278,408" stroke="#6B4226" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 285,432 Q 262,418 240,405" stroke="#6B4226" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- Branch 2 - Second branch going right (back branch) -->
+  <path d="M 462,453 Q 500,435 540,425 Q 570,418 598,410"
+        stroke="#6B4226" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <path d="M 500,435 Q 530,418 560,408" stroke="#6B4226" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 540,425 Q 565,408 590,395" stroke="#6B4226" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- Branch 3 - Upper branches -->
+  <path d="M 545,372 Q 510,352 475,336 Q 450,322 420,310"
+        stroke="#6B4226" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M 475,336 Q 450,318 425,304" stroke="#6B4226" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+  <!-- Branch 4 - Top apex -->
+  <path d="M 590,318 Q 570,298 548,280 Q 528,265 510,250"
+        stroke="#6B4226" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M 548,280 Q 525,262 505,248" stroke="#6B4226" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M 510,250 Q 495,232 478,218" stroke="#6B4226" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Additional secondary branches -->
+  <path d="M 498,430 Q 478,410 458,395" stroke="#7a5030" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M 458,395 Q 438,378 418,365" stroke="#7a5030" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- === FOLIAGE CLOUDS / TÁN LÁ === -->
+  <!-- Using overlapping ellipses to create natural cloud pads -->
+
+  <!-- Foliage Pad 1 - Lower left (branch 1) -->
+  <g opacity="0.95">
+    <ellipse cx="278" cy="398" rx="52" ry="32" fill="#2d7a2a"/>
+    <ellipse cx="255" cy="410" rx="40" ry="25" fill="#3a8c35"/>
+    <ellipse cx="295" cy="412" rx="45" ry="28" fill="#2a6e27"/>
+    <ellipse cx="270" cy="390" rx="38" ry="22" fill="#4a9e42"/>
+    <ellipse cx="248" cy="395" rx="32" ry="18" fill="#3d8c38"/>
+    <ellipse cx="308" cy="398" rx="35" ry="20" fill="#327a2e"/>
+    <ellipse cx="262" cy="380" rx="28" ry="16" fill="#52a848"/>
+    <!-- Light highlights on foliage -->
+    <ellipse cx="268" cy="385" rx="15" ry="9" fill="#65c55a" opacity="0.4"/>
+    <ellipse cx="290" cy="388" rx="12" ry="7" fill="#72d265" opacity="0.35"/>
+  </g>
+
+  <!-- Foliage Pad 1b - Extension of lower branch -->
+  <g opacity="0.9">
+    <ellipse cx="320" cy="408" rx="38" ry="24" fill="#2a7228"/>
+    <ellipse cx="340" cy="418" rx="35" ry="22" fill="#357530"/>
+    <ellipse cx="305" cy="418" rx="30" ry="18" fill="#2d6e2b"/>
+    <ellipse cx="325" cy="398" rx="28" ry="17" fill="#459e40"/>
+  </g>
+
+  <!-- Foliage Pad 2 - Right side (branch 2) -->
+  <g opacity="0.92">
+    <ellipse cx="598" cy="395" rx="48" ry="30" fill="#2d7a2a"/>
+    <ellipse cx="618" cy="407" rx="42" ry="26" fill="#3a8c35"/>
+    <ellipse cx="580" cy="405" rx="45" ry="28" fill="#2a6e27"/>
+    <ellipse cx="608" cy="385" rx="36" ry="22" fill="#4a9e42"/>
+    <ellipse cx="635" cy="394" rx="35" ry="21" fill="#357530"/>
+    <ellipse cx="568" cy="398" rx="30" ry="18" fill="#327a2e"/>
+    <!-- Highlights -->
+    <ellipse cx="600" cy="388" rx="14" ry="8" fill="#65c55a" opacity="0.4"/>
+  </g>
+
+  <!-- Foliage Pad 3 - Middle upper area -->
+  <g opacity="0.93">
+    <ellipse cx="420" cy="300" rx="55" ry="34" fill="#2d7a2a"/>
+    <ellipse cx="398" cy="312" rx="45" ry="28" fill="#3a8c35"/>
+    <ellipse cx="445" cy="315" rx="48" ry="30" fill="#2a6e27"/>
+    <ellipse cx="418" cy="288" rx="40" ry="24" fill="#4a9e42"/>
+    <ellipse cx="390" cy="298" rx="35" ry="20" fill="#327a2e"/>
+    <ellipse cx="452" cy="295" rx="38" ry="23" fill="#357530"/>
+    <ellipse cx="470" cy="308" rx="32" ry="19" fill="#2a6e27"/>
+    <!-- Highlights -->
+    <ellipse cx="415" cy="292" rx="18" ry="10" fill="#65c55a" opacity="0.45"/>
+    <ellipse cx="438" cy="285" rx="14" ry="8" fill="#72d265" opacity="0.35"/>
+  </g>
+
+  <!-- Foliage Pad 4 - Apex / đỉnh -->
+  <g opacity="0.94">
+    <ellipse cx="505" cy="235" rx="50" ry="32" fill="#2d7a2a"/>
+    <ellipse cx="482" cy="248" rx="42" ry="26" fill="#3a8c35"/>
+    <ellipse cx="528" cy="245" rx="45" ry="28" fill="#2a6e27"/>
+    <ellipse cx="510" cy="222" rx="38" ry="22" fill="#4a9e42"/>
+    <ellipse cx="488" cy="230" rx="34" ry="20" fill="#327a2e"/>
+    <ellipse cx="535" cy="228" rx="32" ry="19" fill="#357530"/>
+    <ellipse cx="550" cy="242" rx="28" ry="17" fill="#2a6e27"/>
+    <ellipse cx="470" cy="238" rx="30" ry="18" fill="#3d8c38"/>
+    <!-- Highlights -->
+    <ellipse cx="502" cy="225" rx="16" ry="9" fill="#65c55a" opacity="0.5"/>
+    <ellipse cx="522" cy="218" rx="12" ry="7" fill="#7ed472" opacity="0.4"/>
+  </g>
+
+  <!-- Foliage Pad 5 - Middle back branch -->
+  <g opacity="0.85">
+    <ellipse cx="545" cy="408" rx="42" ry="26" fill="#256824"/>
+    <ellipse cx="565" cy="416" rx="38" ry="23" fill="#2e7229"/>
+    <ellipse cx="525" cy="415" rx="38" ry="24" fill="#246022"/>
+    <ellipse cx="550" cy="396" rx="32" ry="19" fill="#3d8835"/>
+    <!-- Highlights -->
+    <ellipse cx="545" cy="400" rx="13" ry="7" fill="#55a84a" opacity="0.35"/>
+  </g>
+
+  <!-- Some individual leaf details on branch tips -->
+  <g fill="#4aac40" opacity="0.8">
+    <ellipse cx="240" cy="402" rx="10" ry="6" transform="rotate(-20,240,402)"/>
+    <ellipse cx="648" cy="390" rx="10" ry="6" transform="rotate(15,648,390)"/>
+    <ellipse cx="478" cy="218" rx="9" ry="5" transform="rotate(-10,478,218)"/>
+    <ellipse cx="400" cy="285" rx="9" ry="5" transform="rotate(25,400,285)"/>
+  </g>
+
+  <!-- === ANNOTATIONS / CHÚ THÍCH === -->
+
+  <!-- Annotation lines and labels -->
+  <!-- Apex label -->
+  <line x1="505" y1="222" x2="450" y2="170" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
+  <rect x="320" y="152" width="130" height="22" rx="4" fill="rgba(255,255,255,0.85)"/>
+  <text x="385" y="167" text-anchor="middle" font-family="Arial" font-size="12" fill="#c0392b" font-weight="bold">① Đỉnh (Apex)</text>
+
+  <!-- First branch label -->
+  <line x1="355" y1="455" x2="245" y2="480" stroke="#2980b9" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
+  <rect x="130" y="468" width="118" height="22" rx="4" fill="rgba(255,255,255,0.85)"/>
+  <text x="189" y="483" text-anchor="middle" font-family="Arial" font-size="12" fill="#2980b9" font-weight="bold">② Cành số 1</text>
+
+  <!-- Second branch label -->
+  <line x1="540" y1="425" x2="650" y2="450" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
+  <rect x="648" y="440" width="120" height="22" rx="4" fill="rgba(255,255,255,0.85)"/>
+  <text x="708" y="455" text-anchor="middle" font-family="Arial" font-size="12" fill="#27ae60" font-weight="bold">③ Cành số 2</text>
+
+  <!-- Nebari label -->
+  <line x1="340" y1="562" x2="240" y2="545" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
+  <rect x="130" y="532" width="110" height="22" rx="4" fill="rgba(255,255,255,0.85)"/>
+  <text x="185" y="547" text-anchor="middle" font-family="Arial" font-size="12" fill="#8e44ad" font-weight="bold">④ Nebari (rễ)</text>
+
+  <!-- Trunk angle label -->
+  <!-- Angle arc indicator -->
+  <path d="M 390,540 A 40,40 0 0 1 420,510" stroke="#e67e22" stroke-width="2"
+        fill="none" stroke-dasharray="4,3"/>
+  <text x="430" y="535" font-family="Arial" font-size="11" fill="#e67e22" font-weight="bold">~30-40°</text>
+
+  <!-- Aerial root label -->
+  <line x1="511" y1="480" x2="640" y2="500" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
+  <rect x="638" y="488" width="125" height="22" rx="4" fill="rgba(255,255,255,0.85)"/>
+  <text x="700" y="503" text-anchor="middle" font-family="Arial" font-size="12" fill="#7f8c8d" font-weight="bold">⑤ Rễ khí sinh</text>
+
+  <!-- === LEGEND BOX === -->
+  <rect x="30" y="85" width="195" height="165" rx="8" fill="rgba(255,255,255,0.88)" stroke="#2c5f2e" stroke-width="1.5"/>
+  <text x="128" y="106" text-anchor="middle" font-family="Georgia" font-size="13" fill="#2c5f2e" font-weight="bold">📋 Thông số thiết kế</text>
+  <line x1="40" y1="112" x2="215" y2="112" stroke="#2c5f2e" stroke-width="1" opacity="0.4"/>
+
+  <text x="44" y="130" font-family="Arial" font-size="11" fill="#333">
+    <tspan font-weight="bold">Dáng: </tspan>Ngang/Slanted (Moyogi)
+  </text>
+  <text x="44" y="148" font-family="Arial" font-size="11" fill="#333">
+    <tspan font-weight="bold">Góc thân: </tspan>30–45° so với thẳng đứng
+  </text>
+  <text x="44" y="166" font-family="Arial" font-size="11" fill="#333">
+    <tspan font-weight="bold">Cành số 1: </tspan>Đối diện hướng nghiêng
+  </text>
+  <text x="44" y="184" font-family="Arial" font-size="11" fill="#333">
+    <tspan font-weight="bold">Chậu: </tspan>Chữ nhật, nông, màu đất
+  </text>
+  <text x="44" y="202" font-family="Arial" font-size="11" fill="#333">
+    <tspan font-weight="bold">Tán lá: </tspan>3 tầng, dạng mây
+  </text>
+  <text x="44" y="220" font-family="Arial" font-size="11" fill="#333">
+    <tspan font-weight="bold">Nebari: </tspan>Rễ lộ thiên, lan rộng
+  </text>
+  <text x="44" y="238" font-family="Arial" font-size="11" fill="#333">
+    <tspan font-weight="bold">Đặc trưng: </tspan>Rễ khí sinh thả dài
+  </text>
+
+  <!-- === SCALE RATIO === -->
+  <rect x="700" y="580" width="175" height="38" rx="6" fill="rgba(255,255,255,0.82)" stroke="#2c5f2e" stroke-width="1"/>
+  <text x="787" y="597" text-anchor="middle" font-family="Arial" font-size="11" fill="#333" font-weight="bold">Tỉ lệ vàng bonsai</text>
+  <text x="787" y="612" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">Cao : Rộng chậu ≈ 6:1</text>
+
+  <!-- === COMPASS / HƯỚNG GIÓ === -->
+  <g transform="translate(820, 130)">
+    <circle cx="0" cy="0" r="28" fill="rgba(255,255,255,0.8)" stroke="#666" stroke-width="1"/>
+    <text x="0" y="-12" text-anchor="middle" font-size="10" fill="#c0392b" font-weight="bold">N</text>
+    <text x="0" y="18" text-anchor="middle" font-size="10" fill="#333">S</text>
+    <text x="-18" y="4" text-anchor="middle" font-size="10" fill="#333">W</text>
+    <text x="18" y="4" text-anchor="middle" font-size="10" fill="#333">E</text>
+    <line x1="0" y1="-22" x2="0" y2="22" stroke="#999" stroke-width="1" opacity="0.5"/>
+    <line x1="-22" y1="0" x2="22" y2="0" stroke="#999" stroke-width="1" opacity="0.5"/>
+    <!-- Arrow pointing to suggested viewing angle -->
+    <polygon points="0,-20 -5,-8 5,-8" fill="#c0392b" opacity="0.8"/>
+    <text x="0" y="40" text-anchor="middle" font-size="9" fill="#555">Hướng ngắm</text>
+  </g>
+
+  <!-- Watermark / footer -->
+  <text x="450" y="688" text-anchor="middle" font-family="Arial" font-size="11" fill="#7a9a7c" font-style="italic">
+    SpongeBot • Ficus Retusa Slanted Design • 2026
+  </text>
+</svg>

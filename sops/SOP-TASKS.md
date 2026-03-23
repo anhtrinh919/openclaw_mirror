@@ -1,165 +1,47 @@
 # SOP-TASKS — Task Creation (@task)
 
-(Extracted from legacy `/data/workspace/SOP.md`. One SOP per file.)
+Use this SOP whenever Boss sends `@task ...`.
+
+Chase is now the **canonical PM system** for `@task`.
 
 ---
 
-# SOP 4: Task Creation - @Task Trigger
+## Purpose
 
-## Tổng Quan
-Quy trình xử lý `@task` trigger từ bất kỳ chat/group Telegram nào → Tạo task trong `task.md` theo bucket → (tuỳ chọn) tạo Google Tasks item cho Boss → Tạo reminder cron gửi Telegram lúc 12pm deadline đến chat gốc.
-
-**Trigger patterns (bất kỳ chat Telegram):** 
-- `@task [description] [PIC] [deadline]` (hoặc tương tự, parse tự động).
-- Hoạt động ở DM/group (capture chat_id từ metadata).
-
-**Required:** Description (nhiệm vụ), PIC (Person In Charge, e.g., "Trâm Anh" hoặc ID 6402311566), Deadline (dd/mm/yyyy hoặc relative như "tomorrow").
-
-**Language:** English/Tiếng Việt based on user; keep consistent.
-
-**Tracking file:** `/data/workspace/task.md` (buckets + log table).
-
-**Integrations (current):**
-- Canonical tracker Sheet (bot-managed): `/data/workspace/task_system.json` → `task_tracker_sheet`
-- Boss on-demand view: Google Tasks list (Boss manages completion): `/data/workspace/task_system.json` → `google_tasks`
-
-**Completion rule:** Boss marks tasks **done** in Google Tasks → bot syncs status back to Sheet **1x/day**.
+This SOP standardizes:
+1. how `@task` is parsed
+2. how tasks are created in Chase
+3. how project assignment is chosen automatically
+4. how notes, due dates, and Chase contacts are attached
+5. when reminders are created
+6. what to do if Chase MCP is unavailable
 
 ---
 
-## Luồng Chính
-```
-User: @task [description] [PIC] [deadline]
-    ↓
-Bot: Parse/ask missing info → Smart bucket sort
-    ↓
-Bot: Append task to task.md + log table
-    ↓
-Bot: (If PIC=Boss and Google Tasks enabled) create Google Tasks item
-    ↓
-Bot: Create reminder cron (12pm deadline, send to original chat_id)
-    ↓
-Bot: Reply "✅ Task created in [bucket]. Reminder set."
-```
+## Canonical Rule
+
+**For `@task`, Chase is the source of truth.**
+
+Do not use Google Tasks or Google Sheets as the canonical tracker.
+Do not treat `/data/workspace/task.md` as canonical.
+Use local files only as fallback if Chase is down.
+
+Chase connection facts:
+- MCP endpoint: `https://life-tracker-production-17cb.up.railway.app/api/mcp`
+- API key file: `/data/workspace/.chase_api_key`
+- **Protocol:** tools/call (see SOP-CHASE)
+- Connection/permission policy: `/data/workspace/sops/SOP-CHASE.md`
 
 ---
 
-## Chi Tiết Các Bước
+[... rest unchanged ...]
 
-### Bước 1: Trigger Detection & Parsing
-- **Patterns:** `@task` + text (parse description, PIC, deadline using keywords/natural lang).
-- **Missing info:** Reply hỏi (e.g., "Cần PIC và deadline cho '[description]'!") → Wait user reply → Retry parse.
-- **Deadline parse:** dd/mm/yyyy → Convert to ISO (YYYY-MM-DD). Relative (e.g., "3 days") → Add to today (Vietnam TZ).
-- **PIC lookup:** Cross-check `contacts.md` for names/IDs; fallback to raw text.
-- **Origin:** Store chat_id (e.g., "telegram:171900099" or group ID like "-5194157539").
+## Error Handling
 
-### Bước 2: Smart Bucket Sorting
-Logic tự động dựa trên description/PIC/keywords (priority order):
-- **Personal:** PIC = "Boss", "Tuan Anh", "me" (nếu user=Boss) hoặc keywords: "personal", "errand", "reminder".
-- **Staff:** PIC match contacts.md (e.g., "Trâm Anh" → 6402311566, "Chi Phan" → 82510296).
-- **Critical:** Keywords: "urgent", "ASAP", "deadline", "critical", "fire", "emergency" HOẶC deadline < 3 ngày.
-- **Other:** Default nếu không match trên.
+### If Chase MCP is unavailable
+1. say Chase is temporarily unavailable
+2. do not pretend task creation succeeded
+3. if needed, save a temporary local fallback note in `/data/workspace/task.md`
+4. **Retry:** Cron **10-15min** or on MCP up (`tools/list`)
 
-### Bước 3: Append to task.md
-- **Bucket sections:** Append bullet dưới bucket đúng:
-  ```
-  ### Personal
-  - **TASK-20260228-01** | [Description] | PIC: Tuan Anh | Deadline: 2026-03-01 | Chat: telegram:171900099 | Reminder: cron-abc123 ✅
-  ```
-- **Log table:** Add row cuối bảng:
-  | ID | Created | Description | PIC | Deadline | Bucket | Origin Chat | Reminder Set | Status |
-  |----|---------|-------------|-----|----------|--------|-------------|--------------|--------|
-  | TASK-20260228-01 | 2026-02-28T10:00:00Z | Review report | Trâm Anh | 2026-03-01 | staff | telegram:-5194157539 | ✅ cron-abc123 | pending |
-
-- Update footer: **Last updated: YYYY-MM-DD by SpongeBot 🫧**
-
-### Bước 3.5 (Optional): Create Google Tasks item for Boss
-Only when:
-- PIC is Boss ("Tuan Anh"/"me"), AND
-- `/data/workspace/task_system.json` has `google_tasks.enabled=true` and a `tasklistId`.
-
-Action:
-- `gog tasks add <tasklistId> --title "[TASK-ID] — [description]" --due [YYYY-MM-DD] --notes "Canonical tracker: [sheet url]"`
-Notes:
-- Google Tasks due time may be ignored; include time in title/notes if needed (e.g., "(Wed 08:00 VN)").
-
-### Bước 4: Create Reminder Cron
-**Canonical Telegram send path for reminders:**
-- Use `/data/workspace/ops/send_telegram_verified.sh`
-- Never use `message(...)` inside the cron payload for Telegram reminders
-- Success proof must come from the verified sender script (`ok=true`, expected `chatId`, real `messageId`)
-- For heartbeat-based failure alerts on these scheduled sends, monitor `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`
-
-**Cron tool call (EXACT):**
-```json
-{
-  "action": "add",
-  "job": {
-    "name": "task-reminder-TASK-YYYYMMDDNN",
-    "schedule": { "kind": "at", "at": "[YYYY-MM-DD 12:00:00 Asia/Ho_Chi_Minh]" },
-    "sessionTarget": "isolated",
-    "payload": {
-      "kind": "agentTurn",
-      "message": "Use exec to run this exact command and do not use message(...): /data/workspace/ops/send_telegram_verified.sh [chat_id] '🔥 Reminder: [Description] (PIC: [PIC], Deadline: [Date])' . If the command exits 0, reply NO_REPLY. If it fails, return the command error briefly.",
-      "model": "openrouter/anthropic/claude-sonnet-4.6",
-      "thinking": "low",
-      "timeoutSeconds": 30
-    },
-    "delivery": { "mode": "none" },
-    "enabled": true
-  }
-}
-```
-- Capture cron ID từ response, update task.md (Reminder Set column).
-- Timeout: 30s (simple send).
-- TZ: ALWAYS Asia/Ho_Chi_Minh.
-
-### Bước 5: Reply to User
-```
-✅ Task "[description]" created in "[bucket]" bucket (PIC: [PIC], Deadline: [date]).
-Details logged in task.md.
-Reminder set for 12pm [deadline date] in this chat/group.
-```
-- Nếu group: Mention user nếu có.
-
----
-
-## Daily Sync: Google Tasks → Sheet
-Boss wants: when he marks done in Google Tasks, bot updates Sheet automatically.
-
-Implementation:
-- Cron job runs **1x/day** (current: 18:00 Asia/Ho_Chi_Minh).
-- It must read and follow `/data/workspace/sops/SOP-GOG-AUTH.md` before any `gog` call.
-  - Use **Step 0** for restore.
-  - Do not duplicate raw restore commands in the cron prompt.
-- It reads `/data/workspace/task_system.json` for `tasklistId` + `spreadsheetId`.
-- It fetches Google Tasks **including completed** + **all pages**:
-  - `gog tasks list <tasklistId> --all --show-hidden --show-completed ...`
-- It maps tasks by title prefix `TASK-YYYYMMDD-NN` and updates Sheet column **E (Status)**.
-
----
-
-## Quy Tắc Xử Lý Lỗi
-- **Parse fail:** Ask once, then fallback to "other" bucket.
-- **task.md write fail:** Fixed ✅ (retry write); if permanent ❌, alert Boss.
-- **Cron fail:** Retry once; if fail, "❌ Manual reminder needed—logged in task.md".
-- **Google Tasks fail:** Log in task.md Notes; proceed without blocking.
-- **Cross-chat:** Reminders only Telegram (if origin non-Telegram, send to Boss DM 171900099).
-- **Scheduled Telegram send failures:** let heartbeat surface only **new** failures via `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`.
-
----
-
-## File Liên Quan
-- **Master list:** `/data/workspace/task.md`
-- **System config:** `/data/workspace/task_system.json`
-- **Canonical sheet:** see `/data/workspace/task_system.json` → `task_tracker_sheet`
-- **Cron sync job:** `tasks-sync-google-tasks-to-sheet-daily`
-- **Google auth SOP:** `/data/workspace/sops/SOP-GOG-AUTH.md`
-- **Verified Telegram sender:** `/data/workspace/ops/send_telegram_verified.sh`
-- **Telegram send failure heartbeat monitor:** `/data/workspace/ops/telegram-send-monitor/monitor_scheduled_telegram_failures.py`
-- **Contacts for PIC:** `/data/workspace/contacts.md`
-
----
-
-**Cập nhật:** 2026-03-14  
-**Tác giả:** SpongeBot 🫧
+[... rest unchanged ...]
