@@ -30,6 +30,7 @@ If due date or reminder implied → schedule it.
 - Telegram sends: `openclaw message send --channel telegram --target <chatId>` (not sessions_send). Require `payload.ok=true` proof.
 - Sub-agent fails → retry with main agent.
 - NEVER self-edit config or restart gateway.
+- Before acting visibly (sending to others, assigning tasks): confirm with Boss unless a hard-routed SOP covers it.
 
 ---
 

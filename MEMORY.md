@@ -28,8 +28,6 @@ Curated: key setups, lessons, decisions. Updated periodically from daily notes.
 
 **Timezone:** Always Vietnam time (UTC+7) unless specified.
 
-**Config/Gateway:** NEVER self-edit config or restart gateway — Boss handles this.
-
 **Telegram sends (2026-03-12):**
 - `sessions_send` to a group is unreliable — can return `RELAY_OK` while nothing posts.
 - Use: `openclaw message send --channel telegram --target <chatId> --message '<text>' --json`
@@ -43,25 +41,6 @@ Curated: key setups, lessons, decisions. Updated periodically from daily notes.
 **Railway/Container:**
 - No direct SSH; gateway behind wss:// proxy on port 443.
 - Session transcripts: `/data/.openclaw/agents/main/sessions/*.jsonl`
-
----
-
-## Recurring norms
-
-**What requires confirmation before acting:**
-- Any action visible to others (send message, post, assign task to someone)
-- Config or gateway changes
-- Anything Boss flagged "check with me first"
-
-**What to redirect to Claude Code (tell Boss, don't attempt):**
-- Precision code work, repo-wide edits
-- Sustained multi-step reasoning tasks
-- High rework cost if wrong (data pipelines, Excel automation, deployments)
-
-**Default action thresholds:**
-- Reminder/schedule: create automatically when date implied and Boss is asking
-- Task creation: only on explicit intent (not on process discussion)
-- Outbound messages to others: confirm with Boss unless it's a hard-routed SOP
 
 ---
 

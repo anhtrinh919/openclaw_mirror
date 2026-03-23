@@ -19,46 +19,39 @@ Standard flow: Boss → main → (optional squid plan) → sandy/glados execute 
 
 ## Key Files
 
-- `IDENTITY.md` / `SOUL.md` — Agent persona and communication rules (ultra-concise, sub-20-word, lead with answer)
-- `USER.md` — Boss profile (Vietnam UTC+7, English, blunt style)
-- `AGENTS.md` — 8 core workspace rules including startup checklist order
-- `MEMORY.md` — Long-term memory index
-- `contacts.md` — Single source of truth for identity mapping, language, tone
-- `task.md` — Master tasklist (Personal/Staff/Critical/Other buckets)
-- `SOP.md` — SOP index (token-light; open individual SOPs only when triggered)
+- `SOUL.md` — Agent persona and response rules (sub-40-word, lead with answer, root cause always)
+- `USER.md` — Boss profile (UTC+7, English, blunt; when to redirect to Claude Code)
+- `AGENTS.md` — Startup sequence, hard routes, trigger map, delegation + skill routing
+- `MEMORY.md` — Long-term facts: key setups, critical lessons, Boss profile
+- `contacts.md` — Per-person identity, language, tone (SOUL.md is style authority)
+- `SOP.md` — Token-light SOP index; open individual SOPs only when triggered
 - `SKILLS.md` — Skill index (agent-browser, excel-xlsx, scheduler-expert, gog, etc.)
 - `TOOLS.md` — Local tool setup notes and secret paths
 - `TEAM-ROUTING.md` — Live routing: Telegram → main; Discord → direct named-agent chats
-- `multi-agent.md` — Master operating doc (10 sections: roster, workflow, QC policy, token discipline)
+- `multi-agent.md` — Master operating doc (roster, workflow, QC policy, token discipline)
 
 ## Directory Layout
 
 - `ops/` — Operational scripts: backup/restore, Telegram send/monitor, heartbeat, workspace mirror sync
-- `sops/` — One SOP per file, trigger-activated (trade printing, leave requests, morning report, tasks, invoices, etc.)
+- `sops/` — One SOP per file, trigger-activated (trade printing, leave requests, tasks, invoices, etc.)
 - `skills/` — Workspace-custom skills (agent-browser, excel-xlsx, scheduler-expert, pptx, vn-meal-coach)
-- `memory/` — Dated daily notes (69+ files, Feb–Mar 2026)
+- `memory/` — Dated daily notes
 - `deliverables/` — Task output folders with standard artifacts (STATUS/TASK_BRIEF/PLAN/WORKLOG/RESULT)
 - `shared/` — Reusable templates (Sandy primary writer; main/squid read-only)
 - `projects/` — Active project folders
 - `archive/` — Legacy docs and scripts
-- `telegram-account-export/` — Telegram conversation export tooling (JSONL format)
-
-## Scripts
-
-- `backup.sh` — Creates timestamped tarballs of `.openclaw` state + workspace core files to `/data/backups/`
-- `restore.sh` — Restores from latest backups, stops/restarts gateway, runs sanity checks
-- `dust_relay.py` — Python SSE client for Dust agent API with reconnection and auto-approve logic
-- `ops/send_telegram_verified.sh` — Verified Telegram send with JSON validation (requires `payload.ok=true`)
 
 ## Critical Operational Rules
 
-1. **Session startup order:** SOUL → USER → contacts → MEMORY → today's memory note → SOP index → SKILLS → TEAM
-2. **Telegram send:** `sessions_send` to groups is unreliable; use `openclaw message send --channel telegram --target <chatId>`
-3. **Language:** Vietnamese default; Boss stays English
-4. **Team triggers:** `@think`, `@plan`, `@qc`, `@do`, `@doc`, `@task`, `@team`, `@f5`
-5. **Hard-routed SOPs:** Trade printing (chat -5194157539 + Excel), Leave requests (chat -4121104521 + "nghỉ")
-6. **QC policy:** Block only P0 issues; max 2 change cycles
-7. **Token discipline:** Artifact-first, SUMMARY_FOR_HANDOFF ≤200 lines
+1. **Session startup:** SOUL.md, USER.md, IDENTITY.md, MEMORY.md are auto-injected. Read manually: `contacts.md`, then today's + yesterday's memory note. Read on-demand: `SOP.md`, `SKILLS.md`, `TEAM.md`.
+2. **Telegram send:** `sessions_send` to groups is unreliable; use `openclaw message send --channel telegram --target <chatId>`. Require `payload.ok=true` proof.
+3. **Language:** Vietnamese default; Boss stays English.
+4. **Task management:** Chase is the canonical PM tool — use `sops/SOP-TASKS.md` for any create/track/remind intent.
+5. **Hard-routed SOPs:** Trade printing (chat `-5194157539` + Excel), Leave requests (chat `-4121104521` + "nghỉ"), SOP creation (Boss asks to write/standardize a SOP).
+6. **Triggers:** `@think`, `@plan`, `@qc`, `@do`, `@doc`, `@task`, `@team`, `@f5`
+7. **QC policy:** Block only P0 issues; max 2 change cycles.
+8. **Token discipline:** Artifact-first, SUMMARY_FOR_HANDOFF ≤200 lines.
+9. **NEVER self-edit config or restart gateway.**
 
 ## Credentials (paths only)
 
